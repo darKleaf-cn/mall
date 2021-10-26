@@ -29,12 +29,12 @@ export const thanksList = (params) => {
 }
 // 首页接口
 export const productHome = (params) => {
-  return http.fetchGet('/goods/home', params)
+  return http.fetchGet('/book/home', params)
 }
 // 首页接口
-export const navList = (params) => {
-  return http.fetchGet('/goods/navList', params)
-}
+// export const navList = (params) => {
+//   return http.fetchGet('/goods/navList', params)
+// }
 // 推荐板块
 export const recommend = (params) => {
   return http.fetchGet('/goods/recommend', params)

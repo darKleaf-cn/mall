@@ -151,7 +151,7 @@
   import YButton from '/components/YButton'
   import { mapMutations, mapState } from 'vuex'
   import { getCartList, cartDel, getQuickSearch } from '@/api/goods'
-  import { logout, navList } from '@/api/index'
+  import { logout } from '@/api/index'
   import { setStore, getStore, removeStore } from '/utils/storage'
   // import store from '../store/'
   // import 'element-ui/lib/theme-default/index.css'
@@ -362,14 +362,14 @@
       openProduct (productId) {
         window.open('//' + window.location.host + '/#/goodsDetails?productId=' + productId)
       },
-      _getNavList () {
-        navList().then(res => {
-          this.navList = res.result
-        })
-      }
+      // _getNavList () {
+      //   navList().then(res => {
+      //     this.navList = res.result
+      //   })
+      // }
     },
     mounted () {
-      this._getNavList()
+      // this._getNavList()
       this.token = getStore('token')
       if (this.login) {
         this._getCartList()
