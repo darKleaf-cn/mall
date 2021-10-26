@@ -60,7 +60,7 @@
                         <router-link to="/user/coupon">我的优惠</router-link>
                       </li>
                       <li>
-                        <a href="javascript:;" @click="_loginOut">退出</a>
+                        <a href="javascript:;" @click="_logout">退出</a>
                       </li>
                     </ul>
                   </div>
@@ -136,7 +136,7 @@
                   <a @click="changGoods(-2)" :class="{active:choosePage===-2}">全部</a>
                 </li>
                 <li v-for="(item,i) in navList" :key="i">
-                  <a @click="changGoods(i, item)" :class="{active:i===choosePage}">{{item.picUrl}}</a>
+                  <a @click="changGoods(-2, item)" :class="{active:i===choosePage}">{{item.name}}</a>
                 </li>
               </ul>
               <div></div>
@@ -151,7 +151,7 @@
   import YButton from '/components/YButton'
   import { mapMutations, mapState } from 'vuex'
   import { getCartList, cartDel, getQuickSearch } from '@/api/goods'
-  import { loginOut, navList } from '@/api/index'
+  import { logout, navList } from '@/api/index'
   import { setStore, getStore, removeStore } from '/utils/storage'
   // import store from '../store/'
   // import 'element-ui/lib/theme-default/index.css'
@@ -172,7 +172,7 @@
         searchResults: [],
         timeout: null,
         token: '',
-        navList: []
+        navList: config.navList
       }
     },
     computed: {
@@ -336,13 +336,13 @@
         }
       },
       // 退出登陆
-      _loginOut () {
+      _logout () {
         let params = {
           params: {
             token: this.token
           }
         }
-        loginOut(params).then(res => {
+        logout(params).then(res => {
           removeStore('buyCart')
           window.location.href = '/'
         })

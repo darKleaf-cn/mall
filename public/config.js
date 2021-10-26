@@ -1,3 +1,31 @@
 const config = {
-	url:'http://xmall.exrick.cn'
+	// url:'http://xmall.exrick.cn'
+	url:'https://e6d242b3-8948-4645-9e7a-c6c1d09784ff.mock.pstmn.io',
+	navList:[
+		{
+			id:0,
+			name:'艺术',
+			type:1
+		},
+		{
+			id:0,
+			name:'军事',
+			type:1
+		},
+		{
+			id:0,
+			name:'传记',
+			type:1
+		},
+		{
+			id:0,
+			name:'科学',
+			type:1
+		},
+		{
+			id:0,
+			name:'历史',
+			type:1
+		}
+	]
 }
