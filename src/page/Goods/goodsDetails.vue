@@ -25,7 +25,7 @@
           <h6>
             <span>{{product.subTitle}}</span>
             <span class="price">
-              <em>¥</em><i>{{product.salePrice.toFixed(2)}}</i></span>
+              <em>¥</em><i>{{product.price.toFixed(2)}}</i></span>
           </h6>
         </div>
         <div class="num">
@@ -74,7 +74,7 @@
         small: [],
         big: '',
         product: {
-          salePrice: 0
+          price: 0
         },
         productNum: 1,
         userId: ''

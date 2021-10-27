@@ -5,52 +5,41 @@
       <div class="banner">
         <div class="bg" ref="bg" @mouseover="bgOver($refs.bg)" @mousemove="bgMove($refs.bg,$event)"
           @mouseout="bgOut($refs.bg)">
-          <transition name="fade">
-            <div v-for="(item, i) in banner" v-if="i===mark" :key="i" style="position:absolute" @click="linkTo(item)"
+          <transition-group name="fade">
+            <div v-for="item in banner" :key="item.id" style="position:absolute" @click="linkTo(item)"
               @mouseover="stopTimer" @mouseout="startTimer">
-              <img v-if="item.picUrl" class="img1" :src="item.picUrl" />
-              <img v-if="item.picUrl2" class="img2 a" :src="item.picUrl2" />
-              <img v-if="item.picUrl3" class="img3 b" :src="item.picUrl3" />
+              <div v-if="item.id===mark">
+                <img v-if="item.url" class="img1" :src="item.url" />
+                <!-- <img v-if="item.picUrl2" class="img2 a" :src="item.picUrl2" />
+                <img v-if="item.picUrl3" class="img3 b" :src="item.picUrl3" /> -->
+              </div>
             </div>
-          </transition>
+          </transition-group>
         </div>
         <div class="page">
           <ul class="dots">
-            <li class="dot-active" v-for="(item, i) in banner" :class="{ 'dot':i!=mark }" :key="i" @click="change(i)">
+            <li class="dot-active" v-for="item in banner" :class="{ 'dot':item.id!=mark }" :key="item.id"
+              @click="change(item.id)">
             </li>
           </ul>
         </div>
       </div>
 
-      <div v-for="(item,i) in home" :key="i">
+      <div v-for="item in home" :key="item.type">
 
-        <div class="activity-panel" v-if="item.type === 1">
+        <!-- <div class="activity-panel" v-if="item.type === 1">
           <ul class="box">
             <li class="content" v-for="(iitem,j) in item.panelContents" :key="j" @click="linkTo(iitem)">
               <img class="i" :src="iitem.picUrl">
               <a class="cover-link"></a>
             </li>
           </ul>
-        </div>
+        </div> -->
 
-        <section class="w mt30 clearfix" v-if="item.type === 2">
-          <y-shelf :title="item.name">
+        <section class="w mt30 clearfix">
+          <y-shelf :title="item.type">
             <div slot="content" class="hot">
-              <mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContents" :key="j"></mall-goods>
-            </div>
-          </y-shelf>
-        </section>
-
-        <section class="w mt30 clearfix" v-if="item.type === 3">
-          <y-shelf :title="item.name">
-            <div slot="content" class="floors">
-              <div class="imgbanner" v-for="(iitem,j) in item.panelContents" :key="j"
-                v-if="iitem.type === 2 || iitem.type === 3" @click="linkTo(iitem)">
-                <img v-lazy="iitem.picUrl">
-                <a class="cover-link"></a>
-              </div>
-              <mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContents" :key="j+'key'"
-                v-if="iitem.type != 2 && iitem.type != 3"></mall-goods>
+              <mall-goods :msg="book" v-for="book in item.data" :key="book.bookid"></mall-goods>
             </div>
           </y-shelf>
         </section>
@@ -58,7 +47,7 @@
       </div>
     </div>
 
-    <div class="no-info" v-if="error">
+    <!-- <div class="no-info" v-if="error">
       <div class="no-data">
         <img src="/static/images/error.png">
         <br> 抱歉！出错了...
@@ -70,7 +59,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">知道了</el-button>
       </span>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -78,7 +67,7 @@
     productHome
   } from '@/api/index.js'
   import YShelf from '/components/shelf'
-  import product from '/components/product'
+  // import product from '/components/product'
   import mallGoods from '/components/mallGoods'
   import {
     setStore,
@@ -88,7 +77,7 @@
     data() {
       return {
         error: false,
-        banner: [],
+        banner: config.banner,
         mark: 0,
         bgOpt: {
           px: 0,
@@ -97,9 +86,8 @@
           h: 0
         },
         home: [],
-        loading: true,
+        loading: false,
         notify: '1',
-        dialogVisible: false,
         timer: ''
       }
     },
@@ -166,13 +154,13 @@
         dom.style['transform'] = 'rotateY(0deg) rotateX(0deg)'
         dom.style.transform = 'rotateY(0deg) rotateX(0deg)'
       },
-      showNotify() {
-        var value = getStore('notify')
-        if (this.notify !== value) {
-          this.dialogVisible = true
-          setStore('notify', this.notify)
-        }
-      }
+      // showNotify() {
+      //   var value = getStore('notify')
+      //   if (this.notify !== value) {
+      //     this.dialogVisible = true
+      //     setStore('notify', this.notify)
+      //   }
+      // }
     },
     mounted() {
       productHome().then(res => {
@@ -180,23 +168,18 @@
           this.error = true
           return
         }
-        let data = res.result;
-        this.home = data
-        this.loading = false
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].type === 0) {
-            this.banner = data[i].panelContents
-          }
-        }
+        let data = res.result.data;
+        this.home = data;
+        this.loading = false;
       })
-      this.showNotify()
+      // this.showNotify()
     },
     created() {
       this.play()
     },
     components: {
       YShelf,
-      product,
+      // product,
       mallGoods
     }
   }
@@ -245,7 +228,8 @@
         display: inline-block;
         width: 15px;
         height: 15px;
-        background-color: whitesmoke;
+        // background-color: whitesmoke;
+        background-color: black;
         border-radius: 8px;
         margin-right: 10px;
         cursor: pointer;

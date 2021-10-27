@@ -27,5 +27,19 @@ const config = {
 			name:'历史',
 			type:1
 		}
+	],
+	banner:[
+		{
+			id:0,
+			url:'./static/images/banner1.jpg'
+		},
+		{
+			id:1,
+			url:'./static/images/banner2.jpg'
+		},
+		{
+			id:2,
+			url:'./static/images/banner3.jpg'
+		}
 	]
 }
