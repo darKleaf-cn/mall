@@ -2,7 +2,7 @@
   <div class="good-item">
     <div style="">
       <div class="good-img">
-        <a @click="openProduct(msg.bookid)">
+        <a @click="openProduct(msg.bookId)">
           <img v-lazy="msg.image" :alt="msg.name" :key="msg.image">
         </a>
       </div>
@@ -10,12 +10,12 @@
       <h3 class="sub-title ellipsis">{{msg.describe}}</h3>
       <div class="good-price pr">
         <div class="ds pa">
-          <a @click="openProduct(msg.bookid)">
+          <a @click="openProduct(msg.bookId)">
             <y-button text="查看详情" style="margin: 0 5px"></y-button>
           </a>
           <y-button text="加入购物车"
                     style="margin: 0 5px"
-                    @btnClick="addCart(msg.bookid,msg.price,msg.name,msg.image)"
+                    @btnClick="addCart(msg.bookId,msg.price,msg.name,msg.image)"
                     classStyle="main-btn"
           ></y-button>
         </div>
@@ -41,20 +41,20 @@
     methods: {
       ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
       goodsDetails (id) {
-        this.$router.push({path: 'bookDetail/bookid=' + id})
+        this.$router.push({path: 'bookDetail/bookId=' + id})
       },
       openProduct (id) {
-        window.open('//' + window.location.host + '/#/bookDetail?bookid=' + id)
+        window.open('//' + window.location.host + '/#/bookDetail?bookId=' + id)
       },
       addCart (id, price, name, img) {
         if (!this.showMoveImg) {     // 动画是否在运动
           if (this.login) { // 登录了 直接存在用户名下
-            addCart({userId: getStore('userId'), productId: id, productNum: 1}).then(res => {
+            addCart({userId: getStore('userId'), bookId: id, bookNum: 1}).then(res => {
               // 并不重新请求数据
-              this.ADD_CART({productId: id, salePrice: price, productName: name, productImg: img})
+              this.ADD_CART({bookId: id, price: price, name: name, image: img})
             })
           } else { // 未登录 vuex
-            this.ADD_CART({productId: id, salePrice: price, productName: name, productImg: img})
+            this.ADD_CART({bookId: id, price: price, name: name, image: img})
           }
           // 加入购物车动画
           var dom = event.target

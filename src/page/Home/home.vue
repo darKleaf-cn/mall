@@ -39,7 +39,7 @@
         <section class="w mt30 clearfix">
           <y-shelf :title="item.type">
             <div slot="content" class="hot">
-              <mall-goods :msg="book" v-for="book in item.data" :key="book.bookid"></mall-goods>
+              <mall-goods :msg="book" v-for="book in item.data" :key="book.bookId"></mall-goods>
             </div>
           </y-shelf>
         </section>

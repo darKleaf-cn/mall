@@ -24,7 +24,7 @@ router.beforeEach(function (to, from, next) {
     }
   }
   userInfo(params).then(res => {
-    if (res.result.state !== 1) { // 没登录
+    if (res.code !== 200) { // 没登录
       if (whiteList.indexOf(to.path) !== -1) { // 白名单
         next()
       } else {

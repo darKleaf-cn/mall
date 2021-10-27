@@ -84,6 +84,6 @@ export const delOrder = (params) => {
 //   return http.fetchGet('/goods/search', params)
 // }
 // 快速搜索
-export const getQuickSearch = (params) => {
-  return http.fetchGet('/goods/quickSearch', params)
-}
+// export const getQuickSearch = (params) => {
+//   return http.fetchGet('/goods/quickSearch', params)
+// }

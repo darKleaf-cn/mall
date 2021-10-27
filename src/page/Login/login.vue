@@ -147,7 +147,7 @@ export default {
       userLogin(params).then(res => {
         if (res.code == 200) {
           setStore('token', res.result.token)
-          setStore('userId', res.result.userid)
+          setStore('userId', res.result.userId)
           // 登录后添加当前缓存中的购物车
           if (this.cart.length) {
             for (var i = 0; i < this.cart.length; i++) {

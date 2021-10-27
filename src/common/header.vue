@@ -5,7 +5,7 @@
         <div class="w-box">
           <div class="nav-logo">
             <h1 @click="changePage(-1)">
-              <router-link to="/" title="XMall商城官网">XMall商城</router-link>
+              <router-link to="/" title="mall书城">mall书城</router-link>
             </h1>
           </div>
           <div class="right-box">
@@ -81,22 +81,22 @@
                           <li class="clearfix" v-for="(item,i) in cartList" :key="i">
                             <div class="cart-item">
                               <div class="cart-item-inner">
-                                <a @click="openProduct(item.productId)">
+                                <a @click="openProduct(item.bookId)">
                                   <div class="item-thumb">
                                     <img :src="item.productImg">
                                   </div>
                                   <div class="item-desc">
                                     <div class="cart-cell"><h4>
-                                      <a href="" v-text="item.productName"></a>
+                                      <a href="" v-text="item.name"></a>
                                     </h4>
                                       <!-- <p class="attrs"><span>白色</span></p> -->
                                       <h6><span class="price-icon">¥</span><span
-                                        class="price-num">{{item.salePrice}}</span><span
-                                        class="item-num">x {{item.productNum}}</span>
+                                        class="price-num">{{item.price}}</span><span
+                                        class="item-num">x {{item.bookNum}}</span>
                                       </h6></div>
                                   </div>
                                 </a>
-                                <div class="del-btn del" @click="delGoods(item.productId)">删除</div>
+                                <div class="del-btn del" @click="delGoods(item.bookId)">删除</div>
                               </div>
                             </div>
                           </li>
@@ -150,7 +150,7 @@
 <script>
   import YButton from '/components/YButton'
   import { mapMutations, mapState } from 'vuex'
-  import { getCartList, cartDel, getQuickSearch } from '@/api/goods'
+  import { getCartList, cartDel } from '@/api/goods'
   import { logout } from '@/api/index'
   import { setStore, getStore, removeStore } from '/utils/storage'
   // import store from '../store/'
@@ -183,7 +183,7 @@
       totalPrice () {
         var totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
-          totalPrice += (item.productNum * item.salePrice)
+          totalPrice += (item.bookNum * item.price)
         })
         return totalPrice
       },
@@ -191,7 +191,7 @@
       totalNum () {
         var totalNum = 0
         this.cartList && this.cartList.forEach(item => {
-          totalNum += (item.productNum)
+          totalNum += (item.bookNum)
         })
         return totalNum
       }
@@ -250,30 +250,30 @@
             key: this.input
           }
         }
-        getQuickSearch(params).then(res => {
-          if (res === null || res === '') {
-            return
-          }
-          if (res.error) {
-            this.showError(res.error.reason)
-            return
-          }
-          var array = []
-          var maxSize = 5
-          if (res.hits.hits.length <= 5) {
-            maxSize = res.hits.hits.length
-          }
-          for (var i = 0; i < maxSize; i++) {
-            var obj = {}
-            obj.value = res.hits.hits[i]._source.productName
-            array.push(obj)
-          }
-          if (array.length !== 0) {
-            this.searchResults = array
-          } else {
-            this.searchResults = []
-          }
-        })
+        // getQuickSearch(params).then(res => {
+        //   if (res === null || res === '') {
+        //     return
+        //   }
+        //   if (res.error) {
+        //     this.showError(res.error.reason)
+        //     return
+        //   }
+        //   var array = []
+        //   var maxSize = 5
+        //   if (res.hits.hits.length <= 5) {
+        //     maxSize = res.hits.hits.length
+        //   }
+        //   for (var i = 0; i < maxSize; i++) {
+        //     var obj = {}
+        //     obj.value = res.hits.hits[i]._source.productName
+        //     array.push(obj)
+        //   }
+        //   if (array.length !== 0) {
+        //     this.searchResults = array
+        //   } else {
+        //     this.searchResults = []
+        //   }
+        // })
       },
       querySearchAsync (queryString, cb) {
         if (this.input === undefined) {

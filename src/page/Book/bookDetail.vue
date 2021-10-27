@@ -34,11 +34,11 @@
         </div>
         <div class="buy">
           <y-button text="加入购物车"
-                    @btnClick="addCart(book.bookid,book.price,book.name,book.image)"
+                    @btnClick="addCart(book.bookId,book.price,book.name,book.image)"
                     classStyle="main-btn"
                     style="width: 145px;height: 50px;line-height: 48px"></y-button>
           <y-button text="现在购买"
-                    @btnClick="checkout(book.bookid)"
+                    @btnClick="checkout(book.bookId)"
                     style="width: 145px;height: 50px;line-height: 48px;margin-left: 10px"></y-button>
         </div>
       </div>
@@ -86,8 +86,8 @@
     },
     methods: {
       ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
-      _productDet (bookid) {
-        productDet({params: {bookid}}).then(res => {
+      _productDet (bookId) {
+        productDet({params: {bookId}}).then(res => {
           let result = res.result;
           this.book = result;
           this.bookDetail = result.detail || '';
@@ -98,10 +98,10 @@
       addCart (id, price, name, img) {
         if (!this.showMoveImg) {     // 动画是否在运动
           if (this.login) { // 登录了 直接存在用户名下
-            addCart({userId: this.userId, bookid: id, productNum: this.productNum}).then(res => {
+            addCart({userId: this.userId, bookId: id, productNum: this.productNum}).then(res => {
               // 并不重新请求数据
               this.ADD_CART({
-                bookid: id,
+                bookId: id,
                 salePrice: price,
                 productName: name,
                 productImg: img,
@@ -110,7 +110,7 @@
             })
           } else { // 未登录 vuex
             this.ADD_CART({
-              bookid: id,
+              bookId: id,
               salePrice: price,
               productName: name,
               productImg: img,
@@ -129,8 +129,8 @@
           }
         }
       },
-      checkout (bookid) {
-        this.$router.push({path: '/checkout', query: {bookid, num: this.productNum}})
+      checkout (bookId) {
+        this.$router.push({path: '/checkout', query: {bookId, num: this.productNum}})
       },
       editNum (num) {
         this.productNum = num
@@ -140,7 +140,7 @@
       YShelf, BuyNum, YButton
     },
     created () {
-      let id = this.$route.query.bookid
+      let id = this.$route.query.bookId
       this._productDet(id)
       this.userId = getStore('userId')
     }
