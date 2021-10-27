@@ -4,8 +4,8 @@ const Index = () => import('../page/index.vue')
 const Login = () => import('../page/Login/login.vue')
 const Register = () => import('../page/Login/register.vue')
 const Home = () => import('../page/Home/home.vue')
-const GoodS = () => import('../page/Goods/goods.vue')
-const goodsDetails = () => import('../page/Goods/goodsDetails.vue')
+const book = () => import('../page/Book/book.vue')
+const bookDetail = () => import('../page/Book/bookDetail.vue')
 const Cart = () => import('../page/Cart/cart.vue')
 const order = () => import('../page/Order/order.vue')
 const user = () => import('../page/User/user.vue')
@@ -27,6 +27,24 @@ const Alipay = () => import('../page/Order/alipay.vue')
 const Wechat = () => import('../page/Order/wechat.vue')
 const QQpay = () => import('../page/Order/qqpay.vue')
 Vue.use(Router)
+
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+//解决编程式路由往同一地址跳转时会报错的情况
+const originalPush = VueRouter.prototype.push
+const originalReplace = VueRouter.prototype.replace
+//push
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location).catch(err => err)
+}
+//replace
+VueRouter.prototype.replace = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalReplace.call(this, location, onResolve, onReject)
+    return originalReplace.call(this, location).catch(err => err)
+}
+
+
 export default new Router({
   routes: [
     {
@@ -36,8 +54,8 @@ export default new Router({
       redirect: '/home',
       children: [
         {path: 'home', component: Home},
-        {path: 'goods', component: GoodS},
-        {path: 'goodsDetails', name: 'goodsDetails', component: goodsDetails},
+        {path: 'book', component: book},
+        {path: 'bookDetail', name: 'bookDetail', component: bookDetail},
         // {path: 'thanks', name: 'thanks', component: Thanks},
         {path: '/refreshgoods', name: 'refreshgoods', component: RefreshGoods}
       ]

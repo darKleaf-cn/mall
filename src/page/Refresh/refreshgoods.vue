@@ -1,13 +1,13 @@
 <template>
- 
+<div></div>
 </template>
 <script>
 export default {
   data () {
     this.$router.push({
-      path: '/goods',
+      path: '/book',
       query: {
-        cid: this.$route.query.cid
+        type: this.$route.query.type
       }
     })
     return {

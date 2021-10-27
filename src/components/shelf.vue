@@ -1,7 +1,7 @@
 <template>
   <div class="gray-box">
     <div class="title">
-      <h2>{{title+" | 热门推荐"}}</h2>
+      <h2>{{title}}</h2>
       <div>
         <slot name="right"></slot>
       </div>

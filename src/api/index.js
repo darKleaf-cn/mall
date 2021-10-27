@@ -36,9 +36,9 @@ export const productHome = (params) => {
 //   return http.fetchGet('/goods/navList', params)
 // }
 // 推荐板块
-export const recommend = (params) => {
-  return http.fetchGet('/goods/recommend', params)
-}
+// export const recommend = (params) => {
+//   return http.fetchGet('/goods/recommend', params)
+// }
 // 捐赠板块
 export const thank = (params) => {
   return http.fetchGet('/goods/thank', params)

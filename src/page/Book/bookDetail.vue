@@ -7,13 +7,13 @@
           <div class="thumbnail">
             <ul>
               <li v-for="(item,i) in small" :key="i" :class="{on:big===item}" @click="big=item">
-                <img v-lazy="item" :alt="product.productName">
+                <img v-lazy="item" :alt="book.name">
               </li>
             </ul>
           </div>
           <div class="thumb">
             <div class="big">
-              <img :src="big" :alt="product.productName">
+              <img :src="big" :alt="book.name">
             </div>
           </div>
         </div>
@@ -21,24 +21,24 @@
       <!--右边-->
       <div class="banner">
         <div class="sku-custom-title">
-          <h4>{{product.productName}}</h4>
+          <h4>{{book.name}}</h4>
           <h6>
-            <span>{{product.subTitle}}</span>
+            <span>{{book.describe}}</span>
             <span class="price">
-              <em>¥</em><i>{{product.price.toFixed(2)}}</i></span>
+              <em>¥</em><i>{{book.price.toFixed(2)}}</i></span>
           </h6>
         </div>
         <div class="num">
           <span class="params-name">数量</span>
-          <buy-num @edit-num="editNum" :limit="Number(product.limitNum)"></buy-num>
+          <buy-num @edit-num="editNum" :limit="Number(limitNum)"></buy-num>
         </div>
         <div class="buy">
           <y-button text="加入购物车"
-                    @btnClick="addCart(product.productId,product.salePrice,product.productName,product.productImageBig)"
+                    @btnClick="addCart(book.bookid,book.price,book.name,book.image)"
                     classStyle="main-btn"
                     style="width: 145px;height: 50px;line-height: 48px"></y-button>
           <y-button text="现在购买"
-                    @btnClick="checkout(product.productId)"
+                    @btnClick="checkout(book.bookid)"
                     style="width: 145px;height: 50px;line-height: 48px;margin-left: 10px"></y-button>
         </div>
       </div>
@@ -47,8 +47,8 @@
     <div class="item-info">
       <y-shelf title="产品信息">
         <div slot="content">
-          <div class="img-item" v-if="productMsg">
-            <div v-html="productMsg">{{ productMsg }}</div>
+          <div class="img-item" v-if="bookDetail">
+            <img :src="bookDetail" :alt="book.name">
           </div>
           <div class="no-info" v-else>
             <img src="/static/images/no-data.png">
@@ -70,14 +70,15 @@
   export default {
     data () {
       return {
-        productMsg: {},
+        bookDetail: {},
         small: [],
         big: '',
-        product: {
+        book: {
           price: 0
         },
         productNum: 1,
-        userId: ''
+        userId: '',
+        limitNum:10
       }
     },
     computed: {
@@ -85,22 +86,22 @@
     },
     methods: {
       ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
-      _productDet (productId) {
-        productDet({params: {productId}}).then(res => {
-          let result = res.result
-          this.product = result
-          this.productMsg = result.detail || ''
-          this.small = result.productImageSmall
-          this.big = this.small[0]
+      _productDet (bookid) {
+        productDet({params: {bookid}}).then(res => {
+          let result = res.result;
+          this.book = result;
+          this.bookDetail = result.detail || '';
+          this.small = result.imageSmall;
+          this.big = result.image;
         })
       },
       addCart (id, price, name, img) {
         if (!this.showMoveImg) {     // 动画是否在运动
           if (this.login) { // 登录了 直接存在用户名下
-            addCart({userId: this.userId, productId: id, productNum: this.productNum}).then(res => {
+            addCart({userId: this.userId, bookid: id, productNum: this.productNum}).then(res => {
               // 并不重新请求数据
               this.ADD_CART({
-                productId: id,
+                bookid: id,
                 salePrice: price,
                 productName: name,
                 productImg: img,
@@ -109,7 +110,7 @@
             })
           } else { // 未登录 vuex
             this.ADD_CART({
-              productId: id,
+              bookid: id,
               salePrice: price,
               productName: name,
               productImg: img,
@@ -128,8 +129,8 @@
           }
         }
       },
-      checkout (productId) {
-        this.$router.push({path: '/checkout', query: {productId, num: this.productNum}})
+      checkout (bookid) {
+        this.$router.push({path: '/checkout', query: {bookid, num: this.productNum}})
       },
       editNum (num) {
         this.productNum = num
@@ -139,7 +140,7 @@
       YShelf, BuyNum, YButton
     },
     created () {
-      let id = this.$route.query.productId
+      let id = this.$route.query.bookid
       this._productDet(id)
       this.userId = getStore('userId')
     }

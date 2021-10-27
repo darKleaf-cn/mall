@@ -21,7 +21,7 @@
                 :on-icon-click="handleIconClick"
                 @keydown.enter.native="handleIconClick">
               </el-autocomplete>
-              <router-link to="/goods"><a @click="changePage(2)">全部商品</a></router-link>
+              <router-link to="/book"><a @click="changePage(2)">全部商品</a></router-link>
               <!-- <router-link to="/thanks"><a @click="changePage(4)">捐赠</a></router-link> -->
               <!-- <router-link to="/">Smartisan M1 / M1L</router-link>
               <router-link to="/">Smartisan OS</router-link>
@@ -136,7 +136,7 @@
                   <a @click="changGoods(-2)" :class="{active:choosePage===-2}">全部</a>
                 </li>
                 <li v-for="(item,i) in navList" :key="i">
-                  <a @click="changGoods(-2, item)" :class="{active:i===choosePage}">{{item.name}}</a>
+                  <a @click="changGoods(-3, item)" :class="{active:i===choosePage}">{{item.name}}</a>
                 </li>
               </ul>
               <div></div>
@@ -154,8 +154,8 @@
   import { logout } from '@/api/index'
   import { setStore, getStore, removeStore } from '/utils/storage'
   // import store from '../store/'
-  // import 'element-ui/lib/theme-default/index.css'
-  import 'element-ui/lib/theme-chalk/index.css';
+  import 'element-ui/lib/theme-default/index.css'
+  // import 'element-ui/lib/theme-chalk/index.css';
   export default{
     data () {
       return {
@@ -228,20 +228,19 @@
         this.changePage(v)
         if (v === -1) {
           this.$router.push({
-            path: '/'
+            path: '/home'
           })
         } else if (v === -2) {
           this.$router.push({
             path: '/refreshgoods'
           })
         } else {
-          // 站内跳转
-          if (item.type === 1) {
-            window.location.href = item.fullUrl
-          } else {
-            // 站外跳转
-            window.open(item.fullUrl)
-          }
+          this.$router.push({
+            path: '/refreshgoods',
+            query:{
+              type:item.name
+            }
+          })
         }
       },
       // 搜索框提示

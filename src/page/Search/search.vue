@@ -41,7 +41,7 @@
       <div  class="img-item" v-if="!noResult" >
         <!--商品-->
         <div class="goods-box w">
-          <mall-goods v-for="(item,i) in goods" :key="i" :msg="item"></mall-goods>
+          <mall-goods v-for="(item,i) in books" :key="i" :msg="item"></mall-goods>
         </div>
 
         <el-pagination
@@ -60,42 +60,42 @@
           <img src="/static/images/no-search.png">
           <br> 抱歉！没有为您找到相关的商品
         </div>
-        <section class="section">
+        <!-- <section class="section">
           <y-shelf :title="recommendPanel.name">
             <div slot="content" class="recommend">
               <mall-goods :msg="item" v-for="(item,i) in recommendPanel.panelContents" :key="i"></mall-goods>
             </div>
           </y-shelf>
-        </section>
+        </section> -->
       </div>
       <div class="no-info" v-if="error">
         <div class="no-data">
           <img src="/static/images/error.png">
           <br> 抱歉！出错了...
         </div>
-        <section class="section">
+        <!-- <section class="section">
           <y-shelf :title="recommendPanel.name">
             <div slot="content" class="recommend">
               <mall-goods :msg="item" v-for="(item,i) in recommendPanel.panelContents" :key="i"></mall-goods>
             </div>
           </y-shelf>
-        </section>
+        </section> -->
       </div>
     </div>
   </div>
 </template>
 <script>
-  import { getSearch } from '@/api/goods.js'
-  import { recommend } from '@/api/index.js'
+  import { bookQueryList } from '@/api/goods.js'
+  // import { recommend } from '@/api/index.js'
   import mallGoods from '/components/mallGoods'
   import YButton from '/components/YButton'
-  import YShelf from '/components/shelf'
-  import YHeader from '/common/header'
-  import YFooter from '/common/footer'
+  // import YShelf from '/components/shelf'
+  // import YHeader from '/common/header'
+  // import YFooter from '/common/footer'
   export default {
     data () {
       return {
-        goods: [],
+        books: [],
         noResult: false,
         error: false,
         min: '',
@@ -107,7 +107,7 @@
         windowHeight: null,
         windowWidth: null,
         sort: '',
-        recommendPanel: [],
+        // recommendPanel: [],
         currentPage: 1,
         pageSize: 20,
         total: 0,
@@ -132,14 +132,15 @@
             size: this.pageSize,
             page: this.currentPage,
             sort: this.sort,
-            priceGt: this.min,
-            priceLte: this.max
+            minprice: this.min,
+            maxprice: this.max,
+            type: this.$route.query.type
           }
         }
-        getSearch(params).then(res => {
-          if (res.success === true) {
-            this.goods = res.result.itemList
-            this.total = res.result.recordCount
+        bookQueryList(params).then(res => {
+          if (res.code === 200) {
+            this.books = res.result.data;
+            this.total = res.result.total;
             this.noResult = false
             if (this.total === 0) {
               this.noResult = true
@@ -155,7 +156,7 @@
       // 默认排序
       reset () {
         this.sortType = 1
-        this.sort = ''
+        this.sort = 0
         this.currentPage = 1
         this.loading = true
         this._getSearch()
@@ -176,17 +177,17 @@
       this.windowWidth = window.innerWidth
       this.key = this.$route.query.key
       this._getSearch()
-      recommend().then(res => {
-        let data = res.result
-        this.recommendPanel = data[0]
-      })
+      // recommend().then(res => {
+      //   let data = res.result
+      //   this.recommendPanel = data[0]
+      // })
     },
     components: {
       mallGoods,
       YButton,
-      YShelf,
-      YHeader,
-      YFooter
+      // YShelf,
+      // YHeader,
+      // YFooter
     }
   }
 </script>

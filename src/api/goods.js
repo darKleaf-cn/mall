@@ -1,7 +1,7 @@
 import http from './public'
 // 商品列表
-export const getAllGoods = (params) => {
-  return http.fetchGet('/goods/allGoods', params)
+export const bookQueryList = (params) => {
+  return http.fetchGet('/book/queryList', params)
 }
 // 获取购物车列表
 export const getCartList = (params) => {
@@ -80,9 +80,9 @@ export const delOrder = (params) => {
   return http.fetchGet('/member/delOrder', params)
 }
 // 商品列表
-export const getSearch = (params) => {
-  return http.fetchGet('/goods/search', params)
-}
+// export const getSearch = (params) => {
+//   return http.fetchGet('/goods/search', params)
+// }
 // 快速搜索
 export const getQuickSearch = (params) => {
   return http.fetchGet('/goods/quickSearch', params)
