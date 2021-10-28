@@ -5,7 +5,7 @@ import {
   RECORD_USERINFO,
   ADD_ANIMATION,
   SHOW_CART,
-  REDUCE_CART,
+  DEL_CART,
   EDIT_CART
 } from './mutation-types'
 import { setStore, getStore } from '../utils/storage'
@@ -18,7 +18,7 @@ export default {
     }
   },
   // 加入购物车
-  [ADD_CART] (state, {bookId, price, name, image, bookNum = 1}) {
+  [ADD_CART] (state, {bookId, price, name, image, bookNum = 1,cartId = null}) {
     let cart = state.cartList // 购物车
     let falg = true
     let books = {
@@ -26,6 +26,7 @@ export default {
       price,
       name,
       image,
+      cartId
     }
     if (cart.length) {        // 有内容
       cart.forEach(item => {
@@ -72,15 +73,13 @@ export default {
     // }
   },
   // 移除商品
-  [REDUCE_CART] (state, {bookId}) {
+  [DEL_CART] (state, {bookId,cartId}) {
     let cart = state.cartList
     cart.forEach((item, i) => {
-      if (item.bookId === bookId) {
-        if (item.bookNum > 1) {
-          item.bookNum--
-        } else {
-          cart.splice(i, 1)
-        }
+      if(item.cartId === cartId) {
+        cart.splice(i, 1)
+      }else if (item.bookId === bookId) {
+        cart.splice(i, 1)
       }
     })
     state.cartList = cart

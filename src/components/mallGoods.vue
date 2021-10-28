@@ -32,7 +32,7 @@
   export default {
     props: {
       msg: {
-        salePrice: 0
+        price: 0
       }
     },
     data () {
@@ -51,7 +51,9 @@
           if (this.login) { // 登录了 直接存在用户名下
             addCart({userId: getStore('userId'), bookId: id, bookNum: 1}).then(res => {
               // 并不重新请求数据
-              this.ADD_CART({bookId: id, price: price, name: name, image: img})
+              if(res.code === 200){
+                this.ADD_CART({bookId: id, price: price, name: name, image: img, cartId:res.result.cartId})
+              }
             })
           } else { // 未登录 vuex
             this.ADD_CART({bookId: id, price: price, name: name, image: img})

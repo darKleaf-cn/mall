@@ -109,7 +109,7 @@
       },
       _addressAdd (params) {
         addressAdd(params).then(res => {
-          if (res.success === true) {
+          if (res.code === 200) {
             this._addressList()
           } else {
             this.message(res.message)
@@ -136,7 +136,7 @@
       // 删除
       del (addressId, i) {
         addressDel({addressId: addressId}).then(res => {
-          if (res.success === true) {
+          if (res.code === 200) {
             this.addList.splice(i, 1)
           } else {
             this.message('删除失败')

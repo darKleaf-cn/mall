@@ -194,7 +194,7 @@
       },
       _cancelOrder () {
         cancelOrder({orderId: this.orderId}).then(res => {
-          if (res.success === true) {
+          if (res.code === 200) {
             this._getOrderDet()
           } else {
             this.message('取消失败')

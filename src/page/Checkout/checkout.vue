@@ -50,7 +50,8 @@
                 <span class="price">单价</span>
               </div>
               <!--列表-->
-              <div class="cart-table" v-for="(item,i) in cartList" :key="i" v-if="item.checked === '1'">
+              <div class="cart-table" v-for="(item,i) in cartList" :key="i">
+                <div v-if="item.checked === '1'">
                 <div class="cart-group divide pr" :data-productid="item.productId">
                   <div class="cart-top-items">
                     <div class="cart-items clearfix">
@@ -83,6 +84,7 @@
                       </div>
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -181,7 +183,7 @@
             totalPrice += (item.productNum * item.salePrice)
           }
         })
-        this.orderTotal = totalPrice
+        // this.orderTotal = totalPrice
         return totalPrice
       }
     },
@@ -220,7 +222,7 @@
       },
       _addressAdd (params) {
         addressAdd(params).then(res => {
-          if (res.success === true) {
+          if (res.code === 200) {
             this._addressList()
           } else {
             this.message(res.message)
@@ -263,7 +265,7 @@
           orderTotal: this.orderTotal
         }
         submitOrder(params).then(res => {
-          if (res.success === true) {
+          if (res.code === 200) {
             this.payment(res.result)
           } else {
             this.message(res.message)

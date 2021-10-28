@@ -5,37 +5,38 @@
     </y-header>
     <div class="store-content page-cart">
       <div class="gray-box">
-        <div class="title"><h2>购物清单</h2></div>
+        <div class="title">
+          <h2>购物清单</h2>
+        </div>
         <!--内容-->
         <div v-if="cartList.length">
           <div class="ui-cart">
             <div>
               <!--标题-->
               <div class="cart-table-title">
-                <span class="name">商品信息</span> <span class="operation">操作</span> <span
-                class="subtotal">小计</span> <span class="num">数量</span> <span class="price1">单价</span>
+                <span class="name">商品信息</span> <span class="operation">操作</span> <span class="subtotal">小计</span> <span
+                  class="num">数量</span> <span class="price1">单价</span>
               </div>
               <!--列表-->
               <div class="cart-table" v-for="(item,i) in cartList" :key="i">
-                <div class="cart-group divide pr" :data-productid="item.productId">
+                <div class="cart-group divide pr" :data-bookId="item.bookId">
                   <div class="cart-top-items">
                     <div class="cart-items clearfix">
                       <!--勾选-->
                       <div class="items-choose">
-                      <span class="blue-checkbox-new " :class="{'checkbox-on':item.checked === '1'}"
-                            @click="editCart('check',item)"></span>
+                        <span class="blue-checkbox-new " :class="{'checkbox-on':item.checked === '1'}"
+                          @click="editCart('check',item)"></span>
                       </div>
                       <!--图片-->
                       <div class="items-thumb fl">
-                        <img :alt="item.productName"
-                             :src="item.productImg">
-                        <a @click="goodsDetails(item.productId)" :title="item.productName" target="_blank"></a>
+                        <img :alt="item.name" :src="item.image">
+                        <a @click="goodsDetails(item.bookId)" :title="item.name" target="_blank"></a>
                       </div>
                       <!--信息-->
                       <div class="name hide-row fl">
                         <div class="name-table">
-                          <a @click="goodsDetails(item.productId)" :title="item.productName" target="_blank"
-                             v-text="item.productName"></a>
+                          <a @click="goodsDetails(item.bookId)" :title="item.name" target="_blank"
+                            v-text="item.name"></a>
                           <!-- <ul class="attribute">
                             <li>白色</li>
                           </ul> -->
@@ -43,26 +44,21 @@
                       </div>
                       <!--删除按钮-->
                       <div class="operation">
-                        <a class="items-delete-btn" @click="cartdel(item.productId)"></a>
+                        <a class="items-delete-btn" @click="cartdel(item.bookId,item.cartId)"></a>
                       </div>
                       <!--商品数量-->
                       <div>
                         <!--总价格-->
-                        <div class="subtotal" style="font-size: 14px">¥ {{item.salePrice * item.productNum}}</div>
+                        <div class="subtotal" style="font-size: 14px">¥ {{item.price * item.bookNum}}</div>
                         <!--数量-->
-                        <buy-num :num="item.productNum"
-                                 :id="item.productId"
-                                 :checked="item.checked"
-                                 style="height: 140px;
+                        <buy-num :num="item.bookNum" :id="item.bookId" :checked="item.checked" :cartId="item.cartId"
+                          :k=0 style="height: 140px;
                                    display: flex;
                                    align-items: center;
-                                   justify-content: center;"
-                                 :limit="item.limitNum"
-                                 @edit-num="EditNum"
-                        >
+                                   justify-content: center;" :limit="item.limitNum" @edit-num="EditNum">
                         </buy-num>
                         <!--价格-->
-                        <div class="price1">¥ {{item.salePrice}}</div>
+                        <div class="price1">¥ {{item.price}}</div>
                       </div>
                     </div>
                   </div>
@@ -83,19 +79,19 @@
               </div>
               <div class="shipping">
                 <div class="shipping-box">
-                  <div class="shipping-total shipping-num"><h4
-                    class="highlight">已选择 <i v-text="checkNum"></i> 件商品</h4>
-                    <h5>共计 <i v-text="totalNum"></i> 件商品</h5></div>
-                  <div class="shipping-total shipping-price"><h4
-                    class="highlight">应付总额：<span>￥</span><i v-text="checkPrice"></i>
-                  </h4>
+                  <div class="shipping-total shipping-num">
+                    <h4 class="highlight">已选择 <i v-text="checkNum"></i> 件商品</h4>
+                    <h5>共计 <i v-text="totalNum"></i> 件商品</h5>
+                  </div>
+                  <div class="shipping-total shipping-price">
+                    <h4 class="highlight">应付总额：<span>￥</span><i v-text="checkPrice"></i>
+                    </h4>
                     <h5 class="shipping-tips ng-scope">应付总额不含运费</h5>
                   </div>
                 </div>
-                <y-button :classStyle="checkNum > 0 && submit?'main-btn':'disabled-btn'"
-                          class="big-main-btn"
-                          style="margin: 0;width: 130px;height: 50px;line-height: 50px;font-size: 16px"
-                          :text="checkoutNow" @btnClick="checkout"></y-button>
+                <y-button :classStyle="checkNum > 0 && submit?'main-btn':'disabled-btn'" class="big-main-btn"
+                  style="margin: 0;width: 130px;height: 50px;line-height: 50px;font-size: 16px" :text="checkoutNow"
+                  @btnClick="checkout"></y-button>
               </div>
             </div>
           </div>
@@ -117,15 +113,27 @@
   </div>
 </template>
 <script>
-  import { getCartList, cartEdit, editCheckAll, cartDel, delCartChecked } from '@/api/goods'
-  import { mapMutations, mapState } from 'vuex'
+  import {
+    getCartList,
+    cartEdit,
+    editCheckAll,
+    delCart,
+    delCartChecked,
+    addCart
+  } from '@/api/goods'
+  import {
+    mapMutations,
+    mapState
+  } from 'vuex'
   import YButton from '/components/YButton'
   import YHeader from '/common/header'
   import YFooter from '/common/footer'
   import BuyNum from '/components/buynum'
-  import { getStore } from '/utils/storage'
+  import {
+    getStore
+  } from '/utils/storage'
   export default {
-    data () {
+    data() {
       return {
         userId: 0,
         checkoutNow: '现在结算',
@@ -137,11 +145,11 @@
         ['cartList']
       ),
       // 是否全选
-      checkAllFlag () {
+      checkAllFlag() {
         return this.checkedCount === this.cartList.length
       },
       // 勾选的数量
-      checkedCount () {
+      checkedCount() {
         var i = 0
         this.cartList && this.cartList.forEach((item) => {
           if (item.checked === '1') i++
@@ -149,29 +157,29 @@
         return Number(i)
       },
       // 计算总数量
-      totalNum () {
+      totalNum() {
         var totalNum = 0
         this.cartList && this.cartList.forEach(item => {
-          totalNum += (item.productNum)
+          totalNum += (item.bookNum)
         })
         return Number(totalNum)
       },
       // 选中的总价格
-      checkPrice () {
+      checkPrice() {
         var totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
           if (item.checked === '1') {
-            totalPrice += (item.productNum * item.salePrice)
+            totalPrice += (item.bookNum * item.price)
           }
         })
         return totalPrice
       },
       // 选中的商品数量
-      checkNum () {
+      checkNum() {
         var checkNum = 0
         this.cartList && this.cartList.forEach(item => {
           if (item.checked === '1') {
-            checkNum += (item.productNum)
+            checkNum += (item.bookNum)
           }
         })
         return checkNum
@@ -181,90 +189,117 @@
       ...mapMutations([
         'INIT_BUYCART', 'EDIT_CART'
       ]),
-      message (m) {
+      message(m) {
         this.$message.error({
           message: m
         })
       },
-      goodsDetails (id) {
-        window.open(window.location.origin + '#/goodsDetails?productId=' + id)
+      goodsDetails(id) {
+        window.open(window.location.origin + '#/goodsDetails?bookId=' + id)
       },
       // 全选
-      editCheckAll () {
+      editCheckAll() {
         let checkAll = !this.checkAllFlag
-        editCheckAll({userId: this.userId, checked: checkAll}).then(res => {
-          this.EDIT_CART({checked: checkAll})
+        editCheckAll({
+          userId: this.userId,
+          checked: checkAll
+        }).then(res => {
+          this.EDIT_CART({
+            checked: checkAll
+          })
         })
       },
       // 修改购物车
-      _cartEdit (userId, productId, productNum, checked) {
-        cartEdit(
-          {
-            userId,
-            productId,
-            productNum,
-            checked
-          }
-        ).then(res => {
-          if (res.success === true) {
-            this.EDIT_CART(
-              {
-                productId,
-                checked,
-                productNum
-              }
-            )
-          }
-        })
-      },
+      // _cartEdit(userId, bookId, bookNum, checked) {
+      //   cartEdit({
+      //     userId,
+      //     bookId,
+      //     bookNum,
+      //     checked
+      //   }).then(res => {
+      //     if (res.code === 200) {
+      //       this.EDIT_CART({
+      //         bookId,
+      //         checked,
+      //         bookNum
+      //       })
+      //     }
+      //   })
+      // },
       // 修改购物车
-      editCart (type, item) {
-        if (type && item) {
-          let checked = item.checked
-          let productId = item.productId
-          let productNum = item.productNum
-          // 勾选
-          if (type === 'check') {
-            let newChecked = checked === '1' ? '0' : '1'
-            this._cartEdit(this.userId, productId, productNum, newChecked)
-          }
-        } else {
-          console.log('缺少所需参数')
-        }
+      editCart(type, item) {
+        // if (type && item) {
+        let checked = item.checked
+        let bookId = item.bookId
+        let bookNum = item.bookNum
+        // 勾选
+        // if (type === 'check') {
+        //   let newChecked = checked === '1' ? '0' : '1'
+        //   this._cartEdit(this.userId, bookId, bookNum, newChecked)
+        // }
+        // } else {
+        //   console.log('缺少所需参数')
+        // }
       },
-      EditNum (productNum, productId, checked) { // 数量
-        this._cartEdit(this.userId, productId, productNum, checked)
+      EditNum(k, cartId, bookId, checked) { // 数量
+        // this._cartEdit(this.userId, bookId, bookNum, checked)
+        addCart({
+          userId: this.userId,
+          cartId,
+          bookId,
+          bookNum: k
+        }).then(res => {
+          this.ADD_CART({
+            bookId,
+            cartId,
+            bookNum: k
+          })
+        })
       },
       // 删除整条购物车
-      cartdel (productId) {
-        cartDel({userId: this.userId, productId}).then(res => {
-          this.EDIT_CART({productId})
+      cartdel(bookId, cartId) {
+        delCart({
+          userId: this.userId,
+          bookId,
+          cartId
+        }).then(res => {
+          this.EDIT_CART({
+            bookId
+          })
         })
       },
-      checkout () {
+      checkout() {
         this.checkoutNow = '结算中...'
         this.submit = false
-        this.$router.push({path: 'checkout'})
+        this.$router.push({
+          path: 'checkout'
+        })
       },
-      delChecked () {
-        getCartList({userId: getStore('userId')}).then(res => {
-          if (res.success === true) {
+      delChecked() {
+        getCartList({
+          userId: getStore('userId')
+        }).then(res => {
+          if (res.code === 200) {
             res.result.forEach(item => {
               if (item.checked === '1') {
-                let productId = item.productId
-                this.EDIT_CART({productId})
+                let bookId = item.bookId
+                this.EDIT_CART({
+                  bookId
+                })
               }
             })
           }
         })
-        delCartChecked({userId: this.userId}).then(res => {
-          if (res.success !== true) {
+        delCartChecked({
+          userId: this.userId
+        }).then(res => {
+          if (res.code !== 200) {
             this.message('删除失败')
           }
         })
       }
     },
-    mounted () {
+    mounted() {
       this.userId = getStore('userId')
       this.INIT_BUYCART()
     },
@@ -283,6 +318,7 @@
     min-height: 600px;
     padding: 0 0 25px;
     margin: 0 auto;
+
     .gray-box {
       position: relative;
       margin-bottom: 30px;
@@ -292,6 +328,7 @@
       border: 1px solid #dcdcdc;
       border-color: rgba(0, 0, 0, .14);
       box-shadow: 0 3px 8px -6px rgba(0, 0, 0, .1);
+
       .title {
         padding-left: 30px;
         position: relative;
@@ -309,8 +346,10 @@
         color: #333;
       }
     }
+
     .ui-cart {
       padding-bottom: 91px;
+
       .cart-table-title {
         position: relative;
         z-index: 1;
@@ -321,10 +360,12 @@
         background: #eee;
         border-bottom: 1px solid #dbdbdb;
         border-bottom-color: rgba(0, 0, 0, .08);
+
         .name {
           float: left;
           text-align: left;
         }
+
         span {
           width: 137px;
           float: right;
@@ -332,26 +373,32 @@
           color: #838383;
         }
       }
+
       .cart-group.divide {
         .cart-items {
           border-top: 1px dashed #eee;
         }
       }
+
       .cart-items {
         position: relative;
         height: 140px;
         margin-left: 74px;
+
         /*删除*/
         .operation {
           padding: 58px 0 0;
           font-size: 12px;
           line-height: 24px;
+
           .items-delete-btn {
             background-image: url(../../../static/images/delete-btn-icon_a35bf2437e@2x.jpg);
+
             &:hover {
               background-position: 0 -36px;
             }
           }
+
           .items-delete-btn {
             display: block;
             width: 24px;
@@ -367,9 +414,11 @@
             transition: none;
           }
         }
+
         .subtotal {
           font-weight: 700;
         }
+
         .item-cols-num,
         .operation,
         .price1,
@@ -382,9 +431,11 @@
           line-height: 140px;
         }
       }
+
       .cart-group.divide .cart-top-items:first-child .cart-items {
         border-top: none;
       }
+
       .items-choose {
         position: absolute;
         left: -74px;
@@ -395,6 +446,7 @@
         font-size: 12px;
         color: #999;
       }
+
       .items-thumb {
         position: relative;
         margin-top: 30px;
@@ -402,11 +454,14 @@
         width: 80px;
         height: 80px;
       }
+
       img {
         width: 80px;
         height: 80px;
       }
-      .cart-items .items-thumb > a, .ui-cart .cart-items .items-thumb > i {
+
+      .cart-items .items-thumb>a,
+      .ui-cart .cart-items .items-thumb>i {
         position: absolute;
         left: 0;
         right: 0;
@@ -417,22 +472,27 @@
         border: 0 solid rgba(255, 255, 255, .1);
         box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
       }
+
       .name {
         width: 380px;
         margin-left: 20px;
         color: #323232;
         display: table;
+
         a {
           color: #333;
           font-size: 16px;
         }
       }
+
       .name-table {
         display: table-cell;
         vertical-align: middle;
         height: 140px;
       }
-      .attribute, .name p {
+
+      .attribute,
+      .name p {
         color: #999;
         font-size: 12px;
         padding-top: 4px;
@@ -445,6 +505,7 @@
 
   .page-cart {
     padding-top: 40px;
+
     .fix-bottom {
       height: 90px;
       width: 100%;
@@ -457,6 +518,7 @@
       background: linear-gradient(#fdfdfd, #f9f9f9);
       border-top: 1px solid #e9e9e9;
       box-shadow: 0 -3px 8px rgba(0, 0, 0, .04);
+
       .cart-bottom-bg {
         height: 80px;
         /*background: url(../img/store/library/cart-wrapper-bg_4c8003c76e.jpg) repeat-x;*/
@@ -464,23 +526,31 @@
         border-radius: 0 0 8px 8px;
       }
     }
+
     .cart-bar-operation {
       float: left;
       padding: 35px 26px;
       font-size: 12px;
     }
+
     .blue-checkbox-new {
       float: left;
       margin-right: 9px;
     }
-    .choose-all, .delete-choose-goods, .selected-count {
+
+    .choose-all,
+    .delete-choose-goods,
+    .selected-count {
       float: left;
       height: 20px;
       line-height: 20px;
       cursor: pointer;
       position: relative;
     }
-    .blue-checkbox-new, .blue-checkbox-new.checkbox-disable, .blue-checkbox-new.checkbox-on {
+
+    .blue-checkbox-new,
+    .blue-checkbox-new.checkbox-disable,
+    .blue-checkbox-new.checkbox-on {
       display: inline-block;
       position: relative;
       width: 20px;
@@ -494,50 +564,63 @@
       vertical-align: middle;
     }
 
-    .blue-checkbox-new.checkbox-on, .choose-checkbox-on .blue-checkbox-new {
+    .blue-checkbox-new.checkbox-on,
+    .choose-checkbox-on .blue-checkbox-new {
       background: url(../../../static/images/checkbox-new_631a56a4f6.png) no-repeat 0 0;
     }
+
     .delete-choose-goods {
       position: relative;
       margin-left: 21px;
       color: #bbb;
     }
+
     .shipping {
       float: right;
       padding: 20px 30px;
     }
+
     .shipping-box {
       display: inline-block;
       padding-top: 1px;
       margin-right: 10px;
     }
+
     .shipping-total {
       display: inline-block;
       border-left: 1px solid #e1e1e1;
       padding: 0 20px;
+
       .shipping-price {
         width: 155px;
         padding-right: 0;
       }
+
       &.shipping-num i {
         width: 28px;
         display: inline-block;
         text-align: center;
       }
+
       h4 {
         color: #323232;
-        > i {
+
+        >i {
           font-size: 18px;
           font-weight: 700;
         }
-        i, span {
+
+        i,
+        span {
           color: #d44d44;
         }
 
       }
+
       h5 {
         color: #959595;
-        > i {
+
+        >i {
           font-size: 16px;
           font-weight: 700;
         }
@@ -548,9 +631,11 @@
     .shipping-total.shipping-num {
       text-align: right;
     }
+
     .shipping-total:first-child {
       border: none;
     }
+
     .big-main-btn {
       float: right;
       height: 48px;
@@ -564,6 +649,4 @@
     height: 300px;
     color: #8d8d8d;
   }
-
-
 </style>

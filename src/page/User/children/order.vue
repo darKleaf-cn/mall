@@ -152,7 +152,7 @@
           }
         }
         delOrder(params).then(res => {
-          if (res.success === true) {
+          if (res.code === 200) {
             this.orderList.splice(i, 1)
           } else {
             this.message('删除失败')

@@ -125,8 +125,8 @@ export default {
         locaCart.forEach(item => {
           cartArr.push({
             userId: getStore('userId'),
-            productId: item.productId,
-            productNum: item.productNum
+            bookId: item.bookId,
+            bookNum: item.bookNum
           })
         })
       }
@@ -152,7 +152,7 @@ export default {
           if (this.cart.length) {
             for (var i = 0; i < this.cart.length; i++) {
               addCart(this.cart[i]).then(res => {
-                if (res.success === true) {
+                if (res.code === 200) {
                 }
               })
             }

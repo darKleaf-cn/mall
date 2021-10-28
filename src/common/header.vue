@@ -150,7 +150,7 @@
 <script>
   import YButton from '/components/YButton'
   import { mapMutations, mapState } from 'vuex'
-  import { getCartList, cartDel } from '@/api/goods'
+  import { getCartList, delCart } from '@/api/goods'
   import { logout } from '@/api/index'
   import { setStore, getStore, removeStore } from '/utils/storage'
   // import store from '../store/'
@@ -189,7 +189,7 @@
       },
       // 计算数量
       totalNum () {
-        var totalNum = 0
+        var totalNum = 0;
         this.cartList && this.cartList.forEach(item => {
           totalNum += (item.bookNum)
         })
@@ -197,7 +197,7 @@
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART']),
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'DEL_CART', 'RECORD_USERINFO', 'EDIT_CART']),
       handleIconClick (ev) {
         if (this.$route.path === '/search') {
           this.$router.push({
@@ -301,20 +301,20 @@
       // 登陆时获取一次购物车商品
       _getCartList () {
         getCartList({userId: getStore('userId')}).then(res => {
-          if (res.success === true) {
-            setStore('buyCart', res.result)
+          if (res.code === 200) {
+            setStore('buyCart', res.result.data)
           }
           // 重新初始化一次本地数据
         }).then(this.INIT_BUYCART)
       },
       // 删除商品
-      delGoods (productId) {
+      delGoods (bookId) {
         if (this.login) { // 登陆了
-          cartDel({userId: getStore('userId'), productId}).then(res => {
-            this.EDIT_CART({productId})
+          delCart({userId: getStore('userId'), bookId}).then(res => {
+            this.DEL_CART({bookId})
           })
         } else {
-          this.EDIT_CART({productId})
+          this.DEL_CART({bookId})
         }
       },
       toCart () {
@@ -358,8 +358,8 @@
           this.changePage(0)
         }
       },
-      openProduct (productId) {
-        window.open('//' + window.location.host + '/#/goodsDetails?productId=' + productId)
+      openProduct (bookId) {
+        window.open('//' + window.location.host + '/#/bookDetail?bookId=' + bookId)
       },
       // _getNavList () {
       //   navList().then(res => {

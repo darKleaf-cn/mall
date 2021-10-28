@@ -2,22 +2,15 @@
   <!--数量-->
   <div class="item-cols-num clearfix">
     <div class="select">
-      <span class="down"
-            @click.stop.prevent="down()"
-            :class="{'down-disabled':Num<=1}">-
+      <span class="down" @click.stop.prevent="down()" :class="{'down-disabled':Num<=1}">-
       </span>
       <span class="num">
-        <input type="text"
-               :class="{show:show}"
-               v-model="Num>=limit?limit:Num"
-               @blur="blur()"
-               maxlength="2">
-                  <ul ref="ul">
-                    <li v-for="i in numList" :key="i">{{i}}</li>
-                  </ul>
+        <input type="text" :class="{show:show}" v-model="Num" @blur="blur()" maxlength="2">
+        <ul ref="ul">
+          <li v-for="i in numList" :key="i">{{i}}</li>
+        </ul>
       </span>
-      <span class="up" :class="{'up-disabled':Num>=limit}"
-            @click.stop.prevent="up()">+</span>
+      <span class="up" :class="{'up-disabled':Num>=limit}" @click.stop.prevent="up()">+</span>
     </div>
   </div>
 </template>
@@ -37,35 +30,41 @@
       limit: {
         type: Number,
         default: 10
+      },
+      cartId: {
+        type: [Number]
       }
     },
     computed: {},
-    data () {
+    data() {
       return {
         show: true,
         flag: true,
         Num: this.num,
-        numList: []
+        numList: [],
+        k: 0
       }
     },
     methods: {
-      up () {
+      up() {
         if (this.flag && this.Num < this.limit) {
+          this.k = 1;
           this.ani('up')
         }
         return false
       },
-      down () {
+      down() {
         if (this.flag && this.Num > 1) {
+          this.k = -1;
           this.ani('down')
         }
         return false
       },
-      blur () {
+      blur() {
         this.Num = this.Num > this.limit ? Number(this.limit) : Number(this.Num)
-        this.$emit('edit-num', this.Num, this.id, this.checked)
+        this.$emit('edit-num', this.k, this.cartId, this.id, this.checked)
       },
-      ani (opera) {
+      ani(opera) {
         this.flag = false
         let n = this.Num
         this.numList = [n - 1, n, n + 1]
@@ -93,7 +92,7 @@
         })
         this.$emit('edit-num', this.Num, this.id, this.checked)
       },
-      domInt (domStyle) {
+      domInt(domStyle) {
         domStyle.zIndex = '1'
         domStyle.transition = 'all 0s'
         domStyle.transform = 'translateY(-36px)' // 回到原位
@@ -117,10 +116,12 @@
       visibility: hidden;
       position: relative;
       border: none;
+
       &.show {
         visibility: visible;
       }
     }
+
     ul {
       padding: 0;
       line-height: 18px;
@@ -134,7 +135,9 @@
       z-index: 1;
       transform: translateY(-36px);
     }
-    .up.up-disabled, .up.up-disabled:hover {
+
+    .up.up-disabled,
+    .up.up-disabled:hover {
       background-position: 0 -240px !important;
       cursor: not-allowed !important;
     }
@@ -148,18 +151,23 @@
   .select {
     height: 40px;
     padding-top: 4px;
+
     input {
       width: 100%;
       text-align: center;
     }
+
     .down {
       background-position: 0 -60px;
     }
+
     .down.down-disabled:hover {
       background-position: 0 -300px;
       cursor: not-allowed;
     }
-    .down, .up {
+
+    .down,
+    .up {
       background: url(../../static/images/cart-updown_8303731e15@2x.jpg) no-repeat;
       overflow: hidden;
       float: left;
@@ -171,6 +179,7 @@
       cursor: pointer;
       user-select: none;
     }
+
     .num {
       position: relative;
       overflow: hidden;
@@ -185,15 +194,19 @@
       text-align: center;
       font-size: 14px;
     }
+
     .up {
       margin: 0;
       background-position: 0 0;
+
       &:hover {
         background-position: 0 -120px;
       }
     }
+
     .down {
       background-position: 0 -60px;
+
       &:hover {
         background-position: 0 -180px;
       }

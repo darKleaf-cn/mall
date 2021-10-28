@@ -199,7 +199,7 @@
           userId: this.userId,
           payType: this.type
         }).then(res => {
-          if (res.success === true) {
+          if (res.code === 200) {
             setStore('setTime', 90)
             setStore('price', this.money)
             setStore('isCustom', this.isCustom)

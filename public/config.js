@@ -1,6 +1,7 @@
 const config = {
 	// url:'http://xmall.exrick.cn'
-	url:'https://e6d242b3-8948-4645-9e7a-c6c1d09784ff.mock.pstmn.io',
+	// url:'https://e6d242b3-8948-4645-9e7a-c6c1d09784ff.mock.pstmn.io',
+	url:'http://localhost:3000',
 	navList:[
 		{
 			id:0,
