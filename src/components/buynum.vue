@@ -90,7 +90,7 @@
           this.domInt(ulStyle)
           this.flag = true
         })
-        this.$emit('edit-num', this.Num, this.id, this.checked)
+        this.$emit('edit-num', this.k, this.cartId, this.id, this.checked)
       },
       domInt(domStyle) {
         domStyle.zIndex = '1'

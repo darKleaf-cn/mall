@@ -187,7 +187,7 @@
     },
     methods: {
       ...mapMutations([
-        'INIT_BUYCART', 'EDIT_CART'
+        'INIT_BUYCART', 'EDIT_CART', 'ADD_CART'
       ]),
       message(m) {
         this.$message.error({
@@ -243,6 +243,7 @@
       },
       EditNum(k, cartId, bookId, checked) { // 数量
         // this._cartEdit(this.userId, bookId, bookNum, checked)
+        console.log(k)
         addCart({
           userId: this.userId,
           cartId,
