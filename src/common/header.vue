@@ -53,12 +53,12 @@
                       <li>
                         <router-link to="/user/receiverList">收货信息</router-link>
                       </li>
-                      <li>
+                      <!-- <li>
                         <router-link to="/user/support">售后服务</router-link>
                       </li>
                       <li>
                         <router-link to="/user/coupon">我的优惠</router-link>
-                      </li>
+                      </li> -->
                       <li>
                         <a href="javascript:;" @click="_logout">退出</a>
                       </li>

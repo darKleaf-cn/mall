@@ -347,7 +347,8 @@
         })
       }
     },
-    created () {
+    mounted() {
+      this.INIT_BUYCART()
       this.userId = getStore('userId')
       let query = this.$route.query
       if (query.bookId && query.num) {
@@ -358,9 +359,6 @@
         this._getcheckList()
       }
       this._receiverList()
-    },
-    mounted() {
-      this.INIT_BUYCART()
     },
     components: {
       YShelf,

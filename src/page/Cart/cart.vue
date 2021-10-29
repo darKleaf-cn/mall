@@ -18,7 +18,7 @@
                   class="num">数量</span> <span class="price1">单价</span>
               </div>
               <!--列表-->
-              <div class="cart-table" v-for="(item,i) in cartList" :key="i">
+              <div class="cart-table" v-for="item in cartList" :key="item.bookId">
                 <div class="cart-group divide pr" :data-bookId="item.bookId">
                   <div class="cart-top-items">
                     <div class="cart-items clearfix">
@@ -35,8 +35,7 @@
                       <!--信息-->
                       <div class="name hide-row fl">
                         <div class="name-table">
-                          <a @click="bookDetail(item.bookId)" :title="item.name" target="_blank"
-                            v-text="item.name"></a>
+                          <a @click="bookDetail(item.bookId)" :title="item.name" target="_blank" v-text="item.name"></a>
                           <!-- <ul class="attribute">
                             <li>白色</li>
                           </ul> -->
@@ -186,7 +185,7 @@
     },
     methods: {
       ...mapMutations([
-        'INIT_BUYCART', 'EDIT_CART', 'ADD_CART'
+        'INIT_BUYCART', 'EDIT_CART', 'ADD_CART', 'DEL_CART'
       ]),
       message(m) {
         this.$message.error({
@@ -201,7 +200,7 @@
         let checked = this.checkAllFlag ? '0' : '1';
         this.EDIT_CART({
           checked,
-          checkedAll:true
+          checkedAll: true
         })
       },
       // 修改购物车
@@ -256,9 +255,12 @@
           bookId,
           cartId
         }).then(res => {
-          this.EDIT_CART({
-            bookId
-          })
+          if (res.code === 200) {
+            this.DEL_CART({
+              bookId,
+              cartId
+            })
+          }
         })
       },
       checkout() {

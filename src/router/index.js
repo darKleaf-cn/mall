@@ -12,9 +12,9 @@ const user = () => import('../page/User/user.vue')
 const orderList = () => import('../page/User/children/order.vue')
 const information = () => import('../page/User/children/information.vue')
 const receiverList = () => import('../page/User/children/receiverList.vue')
-const coupon = () => import('../page/User/children/coupon.vue')
-const aihuishou = () => import('../page/User/children/aihuishou.vue')
-const support = () => import('../page/User/children/support.vue')
+// const coupon = () => import('../page/User/children/coupon.vue')
+// const aihuishou = () => import('../page/User/children/aihuishou.vue')
+// const support = () => import('../page/User/children/support.vue')
 const checkout = () => import('../page/Checkout/checkout.vue')
 const payment = () => import('../page/Order/payment.vue')
 const paysuccess = () => import('../page/Order/paysuccess.vue')
@@ -86,10 +86,10 @@ export default new Router({
         {path: 'orderList', name: '订单列表', component: orderList},
         {path: 'orderDetail', name: '订单详情', component: orderDetail},
         {path: 'information', name: '账户资料', component: information},
-        {path: 'receiverList', name: '收货地址', component: receiverList},
-        {path: 'coupon', name: '我的优惠', component: coupon},
-        {path: 'support', name: '售后服务', component: support},
-        {path: 'aihuishou', name: '以旧换新', component: aihuishou}
+        {path: 'receiverList', name: '收货信息', component: receiverList},
+        // {path: 'coupon', name: '我的优惠', component: coupon},
+        // {path: 'support', name: '售后服务', component: support},
+        // {path: 'aihuishou', name: '以旧换新', component: aihuishou}
       ]
     },
     {path: '/checkout', name: 'checkout', component: checkout},
