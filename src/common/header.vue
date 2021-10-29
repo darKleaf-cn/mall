@@ -51,7 +51,7 @@
                         <router-link to="/user/information">账号资料</router-link>
                       </li>
                       <li>
-                        <router-link to="/user/addressList">收货地址</router-link>
+                        <router-link to="/user/receiverList">收货信息</router-link>
                       </li>
                       <li>
                         <router-link to="/user/support">售后服务</router-link>
@@ -83,7 +83,7 @@
                               <div class="cart-item-inner">
                                 <a @click="openProduct(item.bookId)">
                                   <div class="item-thumb">
-                                    <img :src="item.productImg">
+                                    <img :src="item.image">
                                   </div>
                                   <div class="item-desc">
                                     <div class="cart-cell"><h4>
@@ -302,7 +302,11 @@
       _getCartList () {
         getCartList({userId: getStore('userId')}).then(res => {
           if (res.code === 200) {
-            setStore('buyCart', res.result.data)
+            const data = res.result.data;
+            for(let item of data){
+              item.checked = '1';
+            }
+            setStore('buyCart', data)
           }
           // 重新初始化一次本地数据
         }).then(this.INIT_BUYCART)

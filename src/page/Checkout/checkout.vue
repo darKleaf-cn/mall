@@ -11,9 +11,9 @@
             <li v-for="(item,i) in addList"
                 :key="i"
                 class="address pr"
-                :class="{checked:addressId === item.addressId}"
-                @click="chooseAddress(item.addressId, item.userName, item.tel, item.streetName)">
-           <span v-if="addressId === item.addressId" class="pa">
+                :class="{checked:receiverId === item.receiverId}"
+                @click="chooseAddress(item.receiverId, item.receiverName, item.receiverPhone, item.receiverAddress)">
+           <span v-if="receiverId === item.receiverId" class="pa">
              <svg viewBox="0 0 1473 1024" width="17.34375" height="12">
              <path
                d="M1388.020 57.589c-15.543-15.787-37.146-25.569-61.033-25.569s-45.491 9.782-61.023 25.558l-716.054 723.618-370.578-374.571c-15.551-15.769-37.151-25.537-61.033-25.537s-45.482 9.768-61.024 25.527c-15.661 15.865-25.327 37.661-25.327 61.715 0 24.053 9.667 45.849 25.327 61.715l431.659 436.343c15.523 15.814 37.124 25.615 61.014 25.615s45.491-9.802 61.001-25.602l777.069-785.403c15.624-15.868 25.271-37.66 25.271-61.705s-9.647-45.837-25.282-61.717M1388.020 57.589z"
@@ -21,12 +21,12 @@
                </path>
              </svg>
              </span>
-              <p>收货人: {{item.userName}} {{item.isDefault ? '(默认地址)' : ''}}</p>
-              <p class="street-name ellipsis">收货地址: {{item.streetName}}</p>
-              <p>手机号码: {{item.tel}}</p>
+              <p>收货人: {{item.receiverName}} {{item.isDefault ? '(默认地址)' : ''}}</p>
+              <p class="street-name ellipsis">收货地址: {{item.receiverAddress}}</p>
+              <p>手机号码: {{item.receiverPhone}}</p>
               <div class="operation-section">
                 <span class="update-btn" style="font-size:12px" @click="update(item)">修改</span>
-                <span class="delete-btn" style="font-size:12px" :data-id="item.addressId" @click="del(item.addressId)">删除</span>
+                <span class="delete-btn" style="font-size:12px" :data-id="item.receiverId" @click="del(item.receiverId)">删除</span>
               </div>
             </li>
 
@@ -50,22 +50,22 @@
                 <span class="price">单价</span>
               </div>
               <!--列表-->
-              <div class="cart-table" v-for="(item,i) in cartList" :key="i">
+              <div class="cart-table" v-for="(item,i) in checkList" :key="i">
                 <div v-if="item.checked === '1'">
-                <div class="cart-group divide pr" :data-productid="item.productId">
+                <div class="cart-group divide pr" :data-bookId="item.bookId">
                   <div class="cart-top-items">
                     <div class="cart-items clearfix">
                       <!--图片-->
                       <div class="items-thumb fl">
-                        <img :alt="item.productName"
-                             :src="item.productImg">
-                        <a @click="goodsDetails(item.productId)" :title="item.productName" target="_blank"></a>
+                        <img :alt="item.name"
+                             :src="item.image">
+                        <a @click="goodsDetails(item.bookId)" :title="item.name" target="_blank"></a>
                       </div>
                       <!--信息-->
                       <div class="name hide-row fl">
                         <div class="name-table">
-                          <a @click="goodsDetails(item.productId)" :title="item.productName" target="_blank"
-                             v-text="item.productName"></a>
+                          <a @click="goodsDetails(item.bookId)" :title="item.name" target="_blank"
+                             v-text="item.name"></a>
                           <!-- <ul class="attribute">
                             <li>白色</li>
                           </ul> -->
@@ -74,13 +74,13 @@
                       <!--商品数量-->
                       <div>
                         <!--总价格-->
-                        <div class="subtotal" style="font-size: 14px">¥ {{item.salePrice * item.productNum}}</div>
+                        <div class="subtotal" style="font-size: 14px">¥ {{item.price * item.bookNum}}</div>
                         <!--数量-->
                         <div class="item-cols-num">
-                          <span v-text="item.productNum"></span>
+                          <span v-text="item.bookNum"></span>
                         </div>
                         <!--价格-->
-                        <div class="price">¥ {{item.salePrice}}</div>
+                        <div class="price">¥ {{item.price}}</div>
                       </div>
                     </div>
                   </div>
@@ -112,15 +112,15 @@
       </y-shelf>
 
       <y-popup :open="popupOpen" @close='popupOpen=false' :title="popupTitle">
-        <div slot="content" class="md" :data-id="msg.addressId">
+        <div slot="content" class="md" :data-id="msg.receiverId">
           <div>
-            <input type="text" placeholder="收货人姓名" v-model="msg.userName">
+            <input type="text" placeholder="收货人姓名" v-model="msg.receiverName">
           </div>
           <div>
-            <input type="number" placeholder="手机号码" v-model="msg.tel">
+            <input type="number" placeholder="手机号码" v-model="msg.receiverPhone">
           </div>
           <div>
-            <input type="text" placeholder="收货地址" v-model="msg.streetName">
+            <input type="text" placeholder="收货地址" v-model="msg.receiverAddress">
           </div>
           <div>
             <el-checkbox class="auto-login" v-model="msg.isDefault">设为默认</el-checkbox>
@@ -128,7 +128,7 @@
           <y-button text='保存'
                     class="btn"
                     :classStyle="btnHighlight?'main-btn':'disabled-btn'"
-                    @btnClick="save({userId:userId,addressId:msg.addressId,userName:msg.userName,tel:msg.tel,streetName:msg.streetName,isDefault:msg.isDefault})">
+                    @btnClick="save({userId:userId,receiverId:msg.receiverId,receiverName:msg.receiverName,receiverPhone:msg.receiverPhone,receiverAddress:msg.receiverAddress,isDefault:msg.isDefault})">
           </y-button>
         </div>
       </y-popup>
@@ -137,33 +137,37 @@
   </div>
 </template>
 <script>
-  import { getCartList, addressList, addressUpdate, addressAdd, addressDel, productDet, submitOrder } from '@/api/goods'
+  import { receiverList, updateReceiver, addReceiver, delReceiver, productDet, submitOrder } from '@/api/goods'
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
   import YPopup from '/components/popup'
   import YHeader from '/common/header'
   import YFooter from '/common/footer'
   import { getStore } from '/utils/storage'
+  import {
+    mapMutations,
+    mapState
+  } from 'vuex'
   export default {
     data () {
       return {
-        cartList: [],
+        checkList: [],
         addList: [],
-        addressId: '0',
+        receiverId: '0',
         popupOpen: false,
         popupTitle: '管理收货地址',
         num: '', // 立刻购买
-        productId: '',
+        bookId: '',
         msg: {
-          addressId: '',
-          userName: '',
-          tel: '',
-          streetName: '',
+          receiverId: '',
+          receiverName: '',
+          receiverPhone: '',
+          receiverAddress: '',
           isDefault: false
         },
-        userName: '',
-        tel: '',
-        streetName: '',
+        receiverName: '',
+        receiverPhone: '',
+        receiverAddress: '',
         userId: '',
         orderTotal: 0,
         submit: false,
@@ -171,16 +175,19 @@
       }
     },
     computed: {
+      ...mapState(
+        ['cartList']
+      ),
       btnHighlight () {
         let msg = this.msg
-        return msg.userName && msg.tel && msg.streetName
+        return msg.receiverName && msg.receiverPhone && msg.receiverAddress
       },
       // 选中的总价格
       checkPrice () {
         let totalPrice = 0
-        this.cartList && this.cartList.forEach(item => {
+        this.checkList && this.checkList.forEach(item => {
           if (item.checked === '1') {
-            totalPrice += (item.productNum * item.salePrice)
+            totalPrice += (item.bookNum * item.price)
           }
         })
         // this.orderTotal = totalPrice
@@ -188,50 +195,55 @@
       }
     },
     methods: {
+      ...mapMutations([
+        'INIT_BUYCART'
+      ]),
       message (m) {
         this.$message.error({
           message: m
         })
       },
       goodsDetails (id) {
-        window.open(window.location.origin + '#/goodsDetails?productId=' + id)
+        window.open(window.location.origin + '#/goodsDetails?bookId=' + id)
       },
-      _getCartList () {
-        getCartList({userId: this.userId}).then(res => {
-          this.cartList = res.result
-        })
+      _getcheckList() {
+        for(let item of this.cartList){
+          if(item.checked === '1'){
+            this.checkList.push(item)
+          }
+        }
       },
-      _addressList () {
-        addressList({userId: this.userId}).then(res => {
-          let data = res.result
+      _receiverList () {
+        receiverList({userId: this.userId}).then(res => {
+          let data = res.result.data
           if (data.length) {
             this.addList = data
-            this.addressId = data[0].addressId || '1'
-            this.userName = data[0].userName
-            this.tel = data[0].tel
-            this.streetName = data[0].streetName
+            this.receiverId = data[0].receiverId
+            this.receiverName = data[0].receiverName
+            this.receiverPhone = data[0].receiverPhone
+            this.receiverAddress = data[0].receiverAddress
           } else {
             this.addList = []
           }
         })
       },
-      _addressUpdate (params) {
-        addressUpdate(params).then(res => {
-          this._addressList()
+      _updateReceiver (params) {
+        updateReceiver(params).then(res => {
+          this._receiverList()
         })
       },
-      _addressAdd (params) {
-        addressAdd(params).then(res => {
+      _addReceiver (params) {
+        addReceiver(params).then(res => {
           if (res.code === 200) {
-            this._addressList()
+            this._receiverList()
           } else {
             this.message(res.message)
           }
         })
       },
-      _addressDel (params) {
-        addressDel(params).then(res => {
-          this._addressList()
+      _delReceiver (params) {
+        delReceiver(params).then(res => {
+          this._receiverList()
         })
       },
       // 提交订单后跳转付款页面
@@ -239,29 +251,29 @@
         this.submitOrder = '提交订单中...'
         this.submit = true
         var array = []
-        if (this.addressId === '0') {
-          this.message('请选择收货地址')
+        if (this.receiverId === '0') {
+          this.message('请选择收货信息')
           this.submitOrder = '提交订单'
           this.submit = false
           return
         }
-        if (this.cartList.length === 0) {
+        if (this.checkList.length === 0) {
           this.message('非法操作')
           this.submitOrder = '提交订单'
           this.submit = false
           return
         }
-        for (var i = 0; i < this.cartList.length; i++) {
-          if (this.cartList[i].checked === '1') {
-            array.push(this.cartList[i])
+        for (var i = 0; i < this.checkList.length; i++) {
+          if (this.checkList[i].checked === '1') {
+            array.push(this.checkList[i])
           }
         }
         let params = {
           userId: this.userId,
-          tel: this.tel,
-          userName: this.userName,
-          streetName: this.streetName,
-          goodsList: array,
+          receiverPhone: this.receiverPhone,
+          receiverName: this.receiverName,
+          receiverAddress: this.receiverAddress,
+          addList,
           orderTotal: this.orderTotal
         }
         submitOrder(params).then(res => {
@@ -285,67 +297,70 @@
         })
       },
       // 选择地址
-      chooseAddress (addressId, userName, tel, streetName) {
-        this.addressId = addressId
-        this.userName = userName
-        this.tel = tel
-        this.streetName = streetName
+      chooseAddress (receiverId, receiverName, receiverPhone, receiverAddress) {
+        this.receiverId = receiverId
+        this.receiverName = receiverName
+        this.receiverPhone = receiverPhone
+        this.receiverAddress = receiverAddress
       },
       // 修改
       update (item) {
         this.popupOpen = true
         if (item) {
           this.popupTitle = '管理收货地址'
-          this.msg.userName = item.userName
-          this.msg.tel = item.tel
-          this.msg.streetName = item.streetName
+          this.msg.receiverName = item.receiverName
+          this.msg.receiverPhone = item.receiverPhone
+          this.msg.receiverAddress = item.receiverAddress
           this.msg.isDefault = item.isDefault
-          this.msg.addressId = item.addressId
+          this.msg.receiverId = item.receiverId
         } else {
           this.popupTitle = '新增收货地址'
-          this.msg.userName = ''
-          this.msg.tel = ''
-          this.msg.streetName = ''
+          this.msg.receiverName = ''
+          this.msg.receiverPhone = ''
+          this.msg.receiverAddress = ''
           this.msg.isDefault = false
-          this.msg.addressId = ''
+          this.msg.receiverId = ''
         }
       },
       // 保存
       save (p) {
         this.popupOpen = false
-        if (p.addressId) {
-          this._addressUpdate(p)
+        if (p.receiverId) {
+          this._updateReceiver(p)
         } else {
-          delete p.addressId
-          this._addressAdd(p)
+          delete p.receiverId
+          this._addReceiver(p)
         }
       },
       // 删除
-      del (addressId) {
-        this._addressDel({addressId})
+      del (receiverId) {
+        this._delReceiver({receiverId})
       },
-      _productDet (productId) {
-        productDet({params: {productId}}).then(res => {
+      _productDet (bookId) {
+        productDet({params: {bookId}}).then(res => {
           let item = res.result
           item.checked = '1'
           item.productImg = item.productImageBig
-          item.productNum = this.num
-          item.productPrice = item.salePrice
-          this.cartList.push(item)
+          item.bookNum = this.num
+          item.productPrice = item.price
+          this.checkList.push(item)
         })
       }
     },
     created () {
       this.userId = getStore('userId')
       let query = this.$route.query
-      if (query.productId && query.num) {
-        this.productId = query.productId
+      if (query.bookId && query.num) {
+        this.bookId = query.bookId
         this.num = query.num
-        this._productDet(this.productId)
+        this._productDet(this.bookId)
       } else {
-        this._getCartList()
+        this._getcheckList()
       }
-      this._addressList()
+      this._receiverList()
+    },
+    mounted() {
+      this.INIT_BUYCART()
     },
     components: {
       YShelf,

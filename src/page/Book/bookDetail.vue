@@ -1,6 +1,6 @@
 <!--商品详情-->
 <template>
-  <div class="w store-content">
+  <div class="w store-content" style='width:1200px'>
     <div class="gray-box">
       <div class="gallery-wrapper">
         <div class="gallery">

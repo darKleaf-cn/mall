@@ -30,12 +30,12 @@
                       <!--图片-->
                       <div class="items-thumb fl">
                         <img :alt="item.name" :src="item.image">
-                        <a @click="goodsDetails(item.bookId)" :title="item.name" target="_blank"></a>
+                        <a @click="bookDetail(item.bookId)" :title="item.name" target="_blank"></a>
                       </div>
                       <!--信息-->
                       <div class="name hide-row fl">
                         <div class="name-table">
-                          <a @click="goodsDetails(item.bookId)" :title="item.name" target="_blank"
+                          <a @click="bookDetail(item.bookId)" :title="item.name" target="_blank"
                             v-text="item.name"></a>
                           <!-- <ul class="attribute">
                             <li>白色</li>
@@ -74,7 +74,6 @@
                     <span :class="{'checkbox-on':checkAllFlag}" class="blue-checkbox-new" @click="editCheckAll"></span>
                     <span @click="editCheckAll">全选</span>
                   </div>
-                  <div class="delete-choose-goods" @click="delChecked">删除选中的商品</div>
                 </div>
               </div>
               <div class="shipping">
@@ -116,7 +115,7 @@
   import {
     getCartList,
     cartEdit,
-    editCheckAll,
+    // editCheckAll,
     delCart,
     delCartChecked,
     addCart
@@ -194,19 +193,15 @@
           message: m
         })
       },
-      goodsDetails(id) {
-        window.open(window.location.origin + '#/goodsDetails?bookId=' + id)
+      bookDetail(id) {
+        window.open(window.location.origin + '#/bookDetail?bookId=' + id)
       },
       // 全选
       editCheckAll() {
-        let checkAll = !this.checkAllFlag
-        editCheckAll({
-          userId: this.userId,
-          checked: checkAll
-        }).then(res => {
-          this.EDIT_CART({
-            checked: checkAll
-          })
+        let checked = this.checkAllFlag ? '0' : '1';
+        this.EDIT_CART({
+          checked,
+          checkedAll:true
         })
       },
       // 修改购物车
@@ -228,22 +223,19 @@
       // },
       // 修改购物车
       editCart(type, item) {
-        // if (type && item) {
         let checked = item.checked
         let bookId = item.bookId
-        let bookNum = item.bookNum
         // 勾选
-        // if (type === 'check') {
-        //   let newChecked = checked === '1' ? '0' : '1'
-        //   this._cartEdit(this.userId, bookId, bookNum, newChecked)
-        // }
-        // } else {
-        //   console.log('缺少所需参数')
-        // }
+        if (type === 'check') {
+          checked = checked === '1' ? '0' : '1';
+          console.log(checked)
+          this.EDIT_CART({
+            bookId,
+            checked
+          })
+        }
       },
       EditNum(k, cartId, bookId, checked) { // 数量
-        // this._cartEdit(this.userId, bookId, bookNum, checked)
-        console.log(k)
         addCart({
           userId: this.userId,
           cartId,
@@ -274,29 +266,6 @@
         this.submit = false
         this.$router.push({
           path: 'checkout'
-        })
-      },
-      delChecked() {
-        getCartList({
-          userId: getStore('userId')
-        }).then(res => {
-          if (res.code === 200) {
-            res.result.forEach(item => {
-              if (item.checked === '1') {
-                let bookId = item.bookId
-                this.EDIT_CART({
-                  bookId
-                })
-              }
-            })
-          }
-        })
-        delCartChecked({
-          userId: this.userId
-        }).then(res => {
-          if (res.code !== 200) {
-            this.message('删除失败')
-          }
         })
       }
     },
