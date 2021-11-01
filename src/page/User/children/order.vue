@@ -3,11 +3,11 @@
     <y-shelf title="我的订单">
       <div slot="content">
         <div v-loading="loading" element-loading-text="加载中..." v-if="orderList.length" style="min-height: 10vw;">
-          <div v-for="(item,i) in orderList" :key="i">
+          <div v-for="item in orderList" :key="item.orderId">
             <div class="gray-sub-title cart-title">
               <div class="first">
                 <div>
-                  <span class="date" v-text="item.createDate"></span>
+                  <span class="date" v-text="item.orderDate"></span>
                   <span class="order-id"> 订单号： <a @click="orderDetail(item.orderId)">{{item.orderId}}</a> </span>
                 </div>
                 <div class="f-bc">
@@ -18,21 +18,24 @@
               </div>
               <div class="last">
                 <span class="sub-total">实付金额</span>
-                <span class="order-detail"> <a @click="orderDetail(item.orderId)">查看详情 ><em class="icon-font"></em></a> </span>
+                <span class="order-detail"> <a @click="orderDetail(item.orderId)">查看详情 ><em class="icon-font"></em></a>
+                </span>
               </div>
             </div>
             <div class="pr">
-              <div class="cart" v-for="(good,j) in item.goodsList" :key="j">
+              <div class="cart" v-for="(book,j) in item.bookList" :key="j">
                 <div class="cart-l" :class="{bt:j>0}">
                   <div class="car-l-l">
-                    <div class="img-box"><a @click="goodsDetails(good.productId)"><img :src="good.productImg" alt=""></a></div>
-                    <div class="ellipsis"><a style="color: #626262;" @click="goodsDetails(good.productId)">{{good.productName}}</a></div>
+                    <div class="img-box"><a @click="booksDetails(book.bookId)"><img :src="book.image" alt=""></a></div>
+                    <div class="ellipsis"><a style="color: #626262;"
+                        @click="booksDetails(book.bookId)">{{book.name}}</a></div>
                   </div>
                   <div class="cart-l-r">
-                    <div>¥ {{Number(good.salePrice).toFixed(2)}}</div>
-                    <div class="num">{{good.productNum}}</div>
+                    <div>¥ {{Number(book.price).toFixed(2)}}</div>
+                    <div class="num">{{book.bookNum}}</div>
                     <div class="type">
-                      <el-button style="margin-left:20px" @click="_delOrder(item.orderId,i)" type="danger" size="small" v-if="j<1" class="del-order">删除此订单</el-button>
+                      <el-button style="margin-left:20px" @click="_delOrder(item.orderId,i)" type="danger" size="small"
+                        v-if="j<1" class="del-order">删除此订单</el-button>
                       <!-- <a @click="_delOrder(item.orderId,i)" href="javascript:;" v-if="j<1" class="del-order">删除此订单</a> -->
                     </div>
                   </div>
@@ -43,11 +46,11 @@
                 </div>
               </div>
               <div class="prod-operation pa" style="right: 0;top: 0;">
-                <div class="total">¥ {{item.orderTotal}}</div>
-                <div v-if="item.orderStatus === '0'">
+                <div class="total">¥ {{item.orderPrice}}</div>
+                <div v-if="item.orderState === '0'">
                   <el-button @click="orderPayment(item.orderId)" type="primary" size="small">现在付款</el-button>
                 </div>
-                <div class="status" v-if="item.orderStatus !== '0'"> {{getOrderStatus(item.orderStatus)}}  </div>
+                <div class="status" v-if="item.orderState !== '0'"> {{getOrderStatus(item.orderState)}} </div>
               </div>
             </div>
           </div>
@@ -60,26 +63,25 @@
       </div>
     </y-shelf>
     <div style="float:right">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[5, 10, 20, 50]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next"
-        :total="total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next" :total="total">
       </el-pagination>
     </div>
   </div>
 </template>
 <script>
-  import { orderList, delOrder } from '@/api/goods'
+  import {
+    orderList,
+    delOrder
+  } from '@/api/goods'
   import YShelf from '/components/shelf'
-  import { getStore } from '/utils/storage'
+  import {
+    getStore
+  } from '/utils/storage'
   export default {
-    data () {
+    data() {
       return {
-        orderList: [0],
+        orderList: [],
         userId: '',
         orderStatus: '',
         loading: true,
@@ -89,26 +91,26 @@
       }
     },
     methods: {
-      message (m) {
+      message(m) {
         this.$message.error({
           message: m
         })
       },
-      handleSizeChange (val) {
+      handleSizeChange(val) {
         this.pageSize = val
         this._orderList()
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         this.currentPage = val
         this._orderList()
       },
-      orderPayment (orderId) {
+      orderPayment(orderId) {
         window.open(window.location.origin + '#/order/payment?orderId=' + orderId)
       },
-      goodsDetails (id) {
-        window.open(window.location.origin + '#/goodsDetails?productId=' + id)
+      booksDetails(id) {
+        window.open(window.location.origin + '#/booksDetails?bookId=' + id)
       },
-      orderDetail (orderId) {
+      orderDetail(orderId) {
         this.$router.push({
           path: 'orderDetail',
           query: {
@@ -116,28 +118,22 @@
           }
         })
       },
-      getOrderStatus (status) {
-        if (status === '1') {
-          return '支付审核中'
+      getOrderStatus(status) {
+        if (status === '0') {
+          return '待付款'
+        } else if (status === '1') {
+          return '已付款，进行中'
         } else if (status === '2') {
-          return '待发货'
-        } else if (status === '3') {
-          return '待收货'
-        } else if (status === '4') {
-          return '交易成功'
-        } else if (status === '5') {
-          return '交易关闭'
-        } else if (status === '6') {
-          return '支付失败'
-        }
+          return '交易完成'
+        } else {
+          return '交易失败'
+        } 
       },
-      _orderList () {
+      _orderList() {
         let params = {
-          params: {
-            userId: this.userId,
-            size: this.pageSize,
-            page: this.currentPage
-          }
+          userId: this.userId,
+          size: this.pageSize,
+          page: this.currentPage
         }
         orderList(params).then(res => {
           this.orderList = res.result.data
@@ -145,11 +141,9 @@
           this.loading = false
         })
       },
-      _delOrder (orderId, i) {
+      _delOrder(orderId, i) {
         let params = {
-          params: {
-            orderId: orderId
-          }
+          orderId: orderId
         }
         delOrder(params).then(res => {
           if (res.code === 200) {
@@ -160,7 +154,7 @@
         })
       }
     },
-    created () {
+    created() {
       this.userId = getStore('userId')
       this._orderList()
     },
@@ -182,26 +176,31 @@
     font-size: 12px;
     color: #666;
     display: flex;
+
     span {
       display: inline-block;
       height: 100%;
     }
+
     .first {
       display: flex;
       justify-content: space-between;
       flex: 1;
+
       .f-bc {
-        > span {
+        >span {
           width: 112px;
           text-align: center;
         }
       }
     }
+
     .last {
       width: 230px;
       text-align: center;
       display: flex;
       border-left: 1px solid #ccc;
+
       span {
         flex: 1;
       }
@@ -225,14 +224,17 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 24px;
+
     &:hover {
       .del-order {
         display: block;
       }
     }
+
     .del-order {
       display: none;
     }
+
     .cart-l {
       display: flex;
       align-items: center;
@@ -240,6 +242,7 @@
       padding: 15px 0;
       justify-content: space-between;
       position: relative;
+
       &:before {
         position: absolute;
         content: ' ';
@@ -249,32 +252,40 @@
         background-color: #EFEFEF;
         height: 100%;
       }
+
       .ellipsis {
         margin-left: 20px;
         width: 220px;
       }
+
       .img-box {
         border: 1px solid #EBEBEB;
       }
+
       img {
         display: block;
         @include wh(80px);
       }
+
       .cart-l-r {
         display: flex;
-        > div {
+
+        >div {
           text-align: center;
           width: 112px;
         }
       }
+
       .car-l-l {
         display: flex;
         align-items: center;
       }
     }
+
     .cart-r {
       width: 230px;
       display: flex;
+
       span {
         text-align: center;
         flex: 1;
@@ -288,10 +299,12 @@
     align-items: center;
     justify-content: center;
     width: 254px;
+
     div {
       width: 100%;
       text-align: center;
     }
+
     div:last-child {
       padding-right: 24px;
     }

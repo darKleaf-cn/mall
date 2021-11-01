@@ -40,7 +40,7 @@
     },
     methods: {
       ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
-      goodsDetails (id) {
+      bookDetail (id) {
         this.$router.push({path: 'bookDetail/bookId=' + id})
       },
       openProduct (id) {

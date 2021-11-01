@@ -39,21 +39,21 @@ export const delReceiver = (params) => {
   return http.fetchPost('/receiver/delReceiver', params)
 }
 
-// 生成订单
+// 提交订单
 export const submitOrder = (params) => {
-  return http.fetchPost('/receiver/addOrder', params)
+  return http.fetchPost('/order/submit', params)
 }
 // 支付
-export const payMent = (params) => {
-  return http.fetchPost('/member/payOrder', params)
+export const payment = (params) => {
+  return http.fetchPost('/order/payment', params)
 }
 // 获取用户订单
 export const orderList = (params) => {
-  return http.fetchGet('/member/orderList', params)
+  return http.fetchPost('/order/list', params)
 }
-// 获取单个订单详情
+// 获取订单详情
 export const getOrderDet = (params) => {
-  return http.fetchGet('/member/orderDetail', params)
+  return http.fetchPost('/order/detail', params)
 }
 // 取消订单
 export const cancelOrder = (params) => {
@@ -61,5 +61,5 @@ export const cancelOrder = (params) => {
 }
 // 删除订单
 export const delOrder = (params) => {
-  return http.fetchGet('/member/delOrder', params)
+  return http.fetchGet('/order/delOrder', params)
 }

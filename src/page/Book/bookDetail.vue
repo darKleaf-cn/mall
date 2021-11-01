@@ -81,7 +81,7 @@
         book: {
           price: 0
         },
-        productNum: 1,
+        bookNum: 1,
         userId: '',
         limitNum: 10
       }
@@ -154,12 +154,12 @@
           path: '/checkout',
           query: {
             bookId,
-            num: this.productNum
+            num: this.bookNum
           }
         })
       },
       editNum(num) {
-        this.productNum = num
+        this.bookNum = num
       }
     },
     components: {

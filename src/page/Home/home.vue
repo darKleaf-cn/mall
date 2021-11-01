@@ -116,9 +116,9 @@
         if (item.type === 0 || item.type === 2) {
           // 关联商品
           this.$router.push({
-            path: '/goodsDetails',
+            path: '/bookDetail',
             query: {
-              productId: item.productId
+              bookId: item.bookId
             }
           })
         } else {

@@ -326,7 +326,7 @@
       },
       // 控制顶部
       navFixed () {
-        if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/goodsDetails' || this.$route.path === '/thanks') {
+        if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/bookDetail' || this.$route.path === '/thanks') {
           var st = document.documentElement.scrollTop || document.body.scrollTop
           st >= 100 ? this.st = true : this.st = false
           // 计算小圆当前位置
