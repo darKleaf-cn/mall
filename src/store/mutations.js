@@ -109,6 +109,8 @@ export default {
     state.userInfo = info
     state.login = true
     setStore('userInfo', info)
+    setStore('token', info.token)
+    setStore('userId', info.userId)
   },
   // 获取用户信息
   [GET_USERINFO](state, info) {

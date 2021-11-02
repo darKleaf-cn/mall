@@ -119,11 +119,11 @@
         })
       },
       getOrderStatus(status) {
-        if (status === '0') {
+        if (status === 0) {
           return '待付款'
-        } else if (status === '1') {
-          return '已付款，进行中'
-        } else if (status === '2') {
+        } else if (status === 1) {
+          return '运输中'
+        } else if (status === 2) {
           return '交易完成'
         } else {
           return '交易失败'
@@ -143,6 +143,7 @@
       },
       _delOrder(orderId, i) {
         let params = {
+          userId: this.userId,
           orderId: orderId
         }
         delOrder(params).then(res => {

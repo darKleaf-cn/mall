@@ -4,24 +4,11 @@
       <div slot="content">
         <div v-loading="loading" element-loading-text="加载中..." style="min-height: 10vw;" v-if="bookList.length">
           <div class="orderState" v-if="orderState !== -1 && orderState !== 6">
-            <el-steps :space="200" :active="orderState">
+            <el-steps :space="200" :active="orderState+2">
               <el-step title="下单" v-bind:description="orderDate"></el-step>
               <el-step title="付款"></el-step>
-              <el-step title="配货" description=""></el-step>
-              <el-step title="出库" description=""></el-step>
+              <el-step title="运输中"></el-step>
               <el-step title="交易成功" v-bind:description="finishTime"></el-step>
-            </el-steps>
-          </div>
-          <div class="orderState-close" v-if="orderState === -1">
-            <el-steps :space="780" :active="2">
-              <el-step title="下单" v-bind:description="orderDate"></el-step>
-              <el-step title="交易关闭" v-bind:description="closeTime"></el-step>
-            </el-steps>
-          </div>
-          <div class="orderState-close" v-if="orderState === 6">
-            <el-steps :space="780" :active="2">
-              <el-step title="下单" v-bind:description="orderDate"></el-step>
-              <el-step title="交易关闭" v-bind:description="closeTime"></el-step>
             </el-steps>
           </div>
           <div class="status-now" v-if="orderState === 0">
@@ -31,33 +18,23 @@
               </li>
               <li class="button">
                 <el-button @click="orderPayment(orderId)" type="primary" size="small">现在付款</el-button>
-                <el-button @click="_cancelOrder()" size="small">取消订单</el-button>
+                <el-button @click="_delOrder()" size="small">取消订单</el-button>
               </li>
             </ul>
-            <p class="realtime">
+            <!-- <p class="realtime">
               <span>您的付款时间还有 </span>
-              <!-- <span class="red">
+              <span class="red">
                 <countDown v-bind:endTime="countTime" endText="已结束"></countDown>
-              </span> -->
+              </span>
               <span>，超时后订单将自动取消。</span>
-            </p>
+            </p> -->
           </div>
           <div class="status-now" v-if="orderState === 1">
             <ul>
               <li class="status-title">
-                <h3>订单状态：已支付，订单进行中</h3>
+                <h3>订单状态：运输中</h3>
               </li>
             </ul>
-          </div>
-          <div class="status-now" v-if="orderState === -1 || orderState === 6">
-            <ul>
-              <li class="status-title">
-                <h3>订单状态：已关闭</h3>
-              </li>
-            </ul>
-            <p class="realtime">
-              <span>您的订单已关闭。</span>
-            </p>
           </div>
           <div class="status-now" v-if="orderState === 2">
             <ul>
@@ -131,7 +108,7 @@
 <script>
   import {
     getOrderDet,
-    cancelOrder
+    delOrder
   } from '@/api/goods'
   import YShelf from '/components/shelf'
   import {
@@ -187,20 +164,24 @@
             this.orderDate = data.createDate
             // this.closeTime = res.result.closeDate
             // this.payTime = res.result.payDate
-          } else {
             this.loading = false
+          } else {
+            // this.loading = false
             this.message(res.message)
           }
         })
       },
-      _cancelOrder() {
-        cancelOrder({
+      _delOrder() {
+        delOrder({
+          userId: this.userId,
           orderId: this.orderId
         }).then(res => {
-          if (res.code === 200) {
-            this._getOrderDet()
+          if (res.code == 200) {
+            this.$router.push({
+              path: 'orderList'
+            })
           } else {
-            this.message('取消失败')
+            this.message(res.mess)
           }
         })
       }

@@ -23,9 +23,6 @@ const Search = () => import('../page/Search/search.vue')
 const RefreshSearch = () => import('../page/Refresh/refreshsearch.vue')
 const RefreshGoods = () => import('../page/Refresh/refreshgoods.vue')
 const orderDetail = () => import('../page/User/children/orderDetail.vue')
-const Alipay = () => import('../page/Order/alipay.vue')
-const Wechat = () => import('../page/Order/wechat.vue')
-const QQpay = () => import('../page/Order/qqpay.vue')
 Vue.use(Router)
 
 import VueRouter from 'vue-router';
@@ -72,9 +69,6 @@ export default new Router({
         {path: 'paysuccess', name: 'paysuccess', component: paysuccess},
         {path: 'payment', name: 'payment', component: payment},
         {path: '/search', name: 'search', component: Search},
-        {path: 'alipay', name: 'alipay', component: Alipay},
-        {path: 'wechat', name: 'wechat', component: Wechat},
-        {path: 'qqpay', name: 'qqpay', component: QQpay}
       ]
     },
     {
@@ -87,9 +81,6 @@ export default new Router({
         {path: 'orderDetail', name: '订单详情', component: orderDetail},
         {path: 'information', name: '账户资料', component: information},
         {path: 'receiverList', name: '收货信息', component: receiverList},
-        // {path: 'coupon', name: '我的优惠', component: coupon},
-        // {path: 'support', name: '售后服务', component: support},
-        // {path: 'aihuishou', name: '以旧换新', component: aihuishou}
       ]
     },
     {path: '/checkout', name: 'checkout', component: checkout},

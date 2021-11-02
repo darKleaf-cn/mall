@@ -50,11 +50,10 @@
                         <!--总价格-->
                         <div class="subtotal" style="font-size: 14px">¥ {{item.price * item.bookNum}}</div>
                         <!--数量-->
-                        <buy-num :num="item.bookNum" :id="item.bookId" :checked="item.checked" :cartId="item.cartId"
-                          :k=0 style="height: 140px;
+                        <buy-num :num="item.bookNum" :id="item.bookId" :cartId="item.cartId" style="height: 140px;
                                    display: flex;
                                    align-items: center;
-                                   justify-content: center;" :limit="item.limitNum" @edit-num="EditNum">
+                                   justify-content: center;" :limit="item.stockNum" @edit-num="EditNum">
                         </buy-num>
                         <!--价格-->
                         <div class="price1">¥ {{item.price}}</div>
@@ -234,7 +233,7 @@
           })
         }
       },
-      EditNum(k, cartId, bookId, checked) { // 数量
+      EditNum(bookNum, k, cartId, bookId) { // 数量
         addCart({
           userId: this.userId,
           cartId,

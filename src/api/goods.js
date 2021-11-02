@@ -55,11 +55,7 @@ export const orderList = (params) => {
 export const getOrderDet = (params) => {
   return http.fetchPost('/order/detail', params)
 }
-// 取消订单
-export const cancelOrder = (params) => {
-  return http.fetchPost('/member/cancelOrder', params)
-}
 // 删除订单
 export const delOrder = (params) => {
-  return http.fetchGet('/order/delOrder', params)
+  return http.fetchPost('/order/delOrder', params)
 }

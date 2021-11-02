@@ -30,7 +30,7 @@
         </div>
         <div class="num">
           <span class="params-name">数量</span>
-          <buy-num @edit-num="editNum" :limit="Number(limitNum)"></buy-num>
+          <buy-num @edit-num="editNum" :limit="Number(stockNum)"></buy-num>
         </div>
         <div class="buy">
           <y-button text="加入购物车" @btnClick="addCart(book.bookId,book.price,book.name,book.image)" classStyle="main-btn"
@@ -83,7 +83,7 @@
         },
         bookNum: 1,
         userId: '',
-        limitNum: 10
+        stockNum: 10
       }
     },
     computed: {
