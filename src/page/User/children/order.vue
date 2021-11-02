@@ -3,7 +3,7 @@
     <y-shelf title="我的订单">
       <div slot="content">
         <div v-loading="loading" element-loading-text="加载中..." v-if="orderList.length" style="min-height: 10vw;">
-          <div v-for="item in orderList" :key="item.orderId">
+          <div v-for="(item,i) in orderList" :key="item.orderId">
             <div class="gray-sub-title cart-title">
               <div class="first">
                 <div>

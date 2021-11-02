@@ -39,7 +39,7 @@
         title: '我的订单',
         nav: [
           {name: '我的订单', path: 'orderList'},
-          {name: '账户资料', path: 'information'},
+          {name: '用户信息', path: 'information'},
           {name: '收货信息', path: 'receiverList'},
         ],
         editAvatar: true

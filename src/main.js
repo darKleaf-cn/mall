@@ -6,6 +6,7 @@ import { userInfo } from '@/api';
 import ElementUI from 'element-ui';
 import VueLazyload from 'vue-lazyload';
 import { getStore } from '/utils/storage';
+import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

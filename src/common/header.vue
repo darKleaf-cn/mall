@@ -10,24 +10,10 @@
           </div>
           <div class="right-box">
             <div class="nav-list">
-              <el-autocomplete
-                placeholder="请输入商品信息"
-                icon="search"
-                v-model="input"
-                :minlength=1
-                :maxlength=100
-                :fetch-suggestions="querySearchAsync"
-                @select="handleSelect"
-                :on-icon-click="handleIconClick"
-                @keydown.enter.native="handleIconClick">
-              </el-autocomplete>
+              <el-input placeholder="请输入内容" v-model="input" class="input-with-select">
+                <el-button slot="append" icon="el-icon-search" @click="handleIconClick"></el-button>
+              </el-input>
               <router-link to="/book"><a @click="changePage(2)">全部商品</a></router-link>
-              <!-- <router-link to="/thanks"><a @click="changePage(4)">捐赠</a></router-link> -->
-              <!-- <router-link to="/">Smartisan M1 / M1L</router-link>
-              <router-link to="/">Smartisan OS</router-link>
-              <router-link to="/">欢喜云</router-link>
-              <router-link to="/">应用下载</router-link>
-              <router-link to="/">官方论坛</router-link> -->
             </div>
             <div class="nav-aside" ref="aside" :class="{fixed:st}">
               <div class="user pr">
@@ -66,8 +52,7 @@
                   </div>
                 </div>
               </div>
-              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)"
-                   ref="positionMsg">
+              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)" ref="positionMsg">
                 <router-link to="/cart"></router-link>
                 <span class="cart-num">
                   <i class="num" :class="{no:totalNum <= 0,move_in_cart:receiveInCart}">{{totalNum}}</i></span>
@@ -86,14 +71,16 @@
                                     <img :src="item.image">
                                   </div>
                                   <div class="item-desc">
-                                    <div class="cart-cell"><h4>
-                                      <a href="" v-text="item.name"></a>
-                                    </h4>
+                                    <div class="cart-cell">
+                                      <h4>
+                                        <a href="" v-text="item.name"></a>
+                                      </h4>
                                       <!-- <p class="attrs"><span>白色</span></p> -->
                                       <h6><span class="price-icon">¥</span><span
-                                        class="price-num">{{item.price}}</span><span
-                                        class="item-num">x {{item.bookNum}}</span>
-                                      </h6></div>
+                                          class="price-num">{{item.price}}</span><span class="item-num">x
+                                          {{item.bookNum}}</span>
+                                      </h6>
+                                    </div>
                                   </div>
                                 </a>
                                 <div class="del-btn del" @click="delGoods(item.bookId)">删除</div>
@@ -103,13 +90,13 @@
                         </ul>
                       </div>
                       <!--总件数-->
-                      <div class="nav-cart-total"><p>共 <strong>{{totalNum}}</strong> 件商品</p> <h5>合计：<span
-                        class="price-icon">¥</span><span
-                        class="price-num">{{totalPrice}}</span></h5>
+                      <div class="nav-cart-total">
+                        <p>共 <strong>{{totalNum}}</strong> 件商品</p>
+                        <h5>合计：<span class="price-icon">¥</span><span class="price-num">{{totalPrice}}</span></h5>
                         <h6>
                           <y-button classStyle="main-btn"
-                                    style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px;line-height: 38px"
-                                    text="去购物车" @btnClick="toCart"></y-button>
+                            style="height: 40px;width: 100%;margin: 0;color: #fff;font-size: 14px;line-height: 38px"
+                            text="去购物车" @btnClick="toCart"></y-button>
                         </h6>
                       </div>
                     </div>
@@ -149,15 +136,27 @@
 </template>
 <script>
   import YButton from '/components/YButton'
-  import { mapMutations, mapState } from 'vuex'
-  import { getCartList, delCart } from '@/api/goods'
-  import { logout } from '@/api/index'
-  import { setStore, getStore, removeStore } from '/utils/storage'
+  import {
+    mapMutations,
+    mapState
+  } from 'vuex'
+  import {
+    getCartList,
+    delCart
+  } from '@/api/goods'
+  import {
+    logout
+  } from '@/api/index'
+  import {
+    setStore,
+    getStore,
+    removeStore
+  } from '/utils/storage'
   // import store from '../store/'
-  import 'element-ui/lib/theme-default/index.css'
+  // import 'element-ui/lib/theme-default/index.css'
   // import 'element-ui/lib/theme-chalk/index.css';
-  export default{
-    data () {
+  export default {
+    data() {
       return {
         user: {},
         // 查询数据库的商品
@@ -180,7 +179,7 @@
         'cartList', 'login', 'receiveInCart', 'showCart', 'userInfo'
       ]),
       // 计算价格
-      totalPrice () {
+      totalPrice() {
         var totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
           totalPrice += (item.bookNum * item.price)
@@ -188,7 +187,7 @@
         return totalPrice
       },
       // 计算数量
-      totalNum () {
+      totalNum() {
         var totalNum = 0;
         this.cartList && this.cartList.forEach(item => {
           totalNum += (item.bookNum)
@@ -197,8 +196,13 @@
       }
     },
     methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'DEL_CART', 'RECORD_USERINFO', 'EDIT_CART']),
-      handleIconClick (ev) {
+      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'DEL_CART', 'RECORD_USERINFO',
+        'EDIT_CART'
+      ]),
+      handleIconClick(ev) {
+        if(!this.input){
+          return false;
+        }
         if (this.$route.path === '/search') {
           this.$router.push({
             path: '/refreshsearch',
@@ -215,16 +219,16 @@
           })
         }
       },
-      showError (m) {
+      showError(m) {
         this.$message.error({
           message: m
         })
       },
       // 导航栏文字样式改变
-      changePage (v) {
+      changePage(v) {
         this.choosePage = v
       },
-      changGoods (v, item) {
+      changGoods(v, item) {
         this.changePage(v)
         if (v === -1) {
           this.$router.push({
@@ -237,14 +241,14 @@
         } else {
           this.$router.push({
             path: '/refreshgoods',
-            query:{
-              type:item.name
+            query: {
+              type: item.name
             }
           })
         }
       },
       // 搜索框提示
-      loadAll () {
+      loadAll() {
         let params = {
           params: {
             key: this.input
@@ -275,7 +279,7 @@
         //   }
         // })
       },
-      querySearchAsync (queryString, cb) {
+      querySearchAsync(queryString, cb) {
         if (this.input === undefined) {
           cb([])
           return
@@ -291,19 +295,23 @@
           }, 300)
         }
       },
-      handleSelect (item) {
+      handleSelect(item) {
         this.input = item.value
       },
       // 购物车显示
-      cartShowState (state) {
-        this.SHOW_CART({showCart: state})
+      cartShowState(state) {
+        this.SHOW_CART({
+          showCart: state
+        })
       },
       // 登陆时获取一次购物车商品
-      _getCartList () {
-        getCartList({userId: getStore('userId')}).then(res => {
+      _getCartList() {
+        getCartList({
+          userId: getStore('userId')
+        }).then(res => {
           if (res.code === 200) {
             const data = res.result.data;
-            for(let item of data){
+            for (let item of data) {
               item.checked = '1';
             }
             setStore('buyCart', data)
@@ -312,34 +320,47 @@
         }).then(this.INIT_BUYCART)
       },
       // 删除商品
-      delGoods (bookId) {
+      delGoods(bookId) {
         if (this.login) { // 登陆了
-          delCart({userId: getStore('userId'), bookId}).then(res => {
-            this.DEL_CART({bookId})
+          delCart({
+            userId: getStore('userId'),
+            bookId
+          }).then(res => {
+            this.DEL_CART({
+              bookId
+            })
           })
         } else {
-          this.DEL_CART({bookId})
+          this.DEL_CART({
+            bookId
+          })
         }
       },
-      toCart () {
-        this.$router.push({path: '/cart'})
+      toCart() {
+        this.$router.push({
+          path: '/cart'
+        })
       },
       // 控制顶部
-      navFixed () {
-        if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/bookDetail' || this.$route.path === '/thanks') {
+      navFixed() {
+        if (this.$route.path === '/goods' || this.$route.path === '/home' || this.$route.path === '/bookDetail' || this
+          .$route.path === '/thanks') {
           var st = document.documentElement.scrollTop || document.body.scrollTop
           st >= 100 ? this.st = true : this.st = false
           // 计算小圆当前位置
           let num = document.querySelector('.num')
           this.positionL = num.getBoundingClientRect().left
           this.positionT = num.getBoundingClientRect().top
-          this.ADD_ANIMATION({cartPositionL: this.positionL, cartPositionT: this.positionT})
+          this.ADD_ANIMATION({
+            cartPositionL: this.positionL,
+            cartPositionT: this.positionT
+          })
         } else {
           return
         }
       },
       // 退出登陆
-      _logout () {
+      _logout() {
         let params = {
           params: {
             token: this.token
@@ -351,7 +372,7 @@
         })
       },
       // 通过路由改变导航文字样式
-      getPage () {
+      getPage() {
         let path = this.$route.path
         // let fullPath = this.$route.fullPath
         if (path === '/' || path === '/home') {
@@ -362,7 +383,7 @@
           this.changePage(0)
         }
       },
-      openProduct (bookId) {
+      openProduct(bookId) {
         window.open('//' + window.location.host + '/#/bookDetail?bookId=' + bookId)
       },
       // _getNavList () {
@@ -371,7 +392,7 @@
       //   })
       // }
     },
-    mounted () {
+    mounted() {
       // this._getNavList()
       this.token = getStore('token')
       if (this.login) {
@@ -404,15 +425,19 @@
     0% {
       transform: scale(1)
     }
+
     25% {
       transform: scale(.8)
     }
+
     50% {
       transform: scale(1.2)
     }
+
     75% {
       transform: scale(.9)
     }
+
     100% {
       transform: scale(1)
     }
@@ -422,15 +447,19 @@
     0% {
       transform: scale(1)
     }
+
     25% {
       transform: scale(.8)
     }
+
     50% {
       transform: scale(1.2)
     }
+
     75% {
       transform: scale(.9)
     }
+
     100% {
       transform: scale(1)
     }
@@ -440,15 +469,19 @@
     0% {
       transform: scale(1)
     }
+
     25% {
       transform: scale(.8)
     }
+
     50% {
       transform: scale(1.2)
     }
+
     75% {
       transform: scale(.9)
     }
+
     100% {
       transform: scale(1)
     }
@@ -458,15 +491,19 @@
     0% {
       transform: scale(1)
     }
+
     25% {
       transform: scale(.8)
     }
+
     50% {
       transform: scale(1.2)
     }
+
     75% {
       transform: scale(.9)
     }
+
     100% {
       transform: scale(1)
     }
@@ -491,12 +528,14 @@
     justify-content: space-between;
     align-items: center;
     height: 100%;
+
     // position: relative;
     h1 {
       height: 100%;
       display: flex;
       align-items: center;
-      > a {
+
+      >a {
         background: url(/static/images/global-logo-red@2x.png) no-repeat 50%;
         background-size: cover;
         display: block;
@@ -505,34 +544,42 @@
         background-position: 0 0;
       }
     }
+
     .nav-list {
       display: flex;
       justify-content: center;
       align-items: center;
       margin-right: 22px;
-      .el-autocomplete{
+
+      .el-autocomplete {
         width: 305px;
       }
+
       a {
         width: 110px;
         color: #c8c8c8;
         display: block;
         font-size: 14px;
         padding: 0 25px;
+
         &:hover {
           color: #fff;
         }
       }
-      a:nth-child(2){
+
+      a:nth-child(2) {
         // width: 5vw;
         margin-left: -10px;
       }
+
       // a:nth-child(3){
       //   width: 5vw;
       // }
     }
+
     .nav-aside {
       position: relative;
+
       &:before {
         background: #333;
         background: hsla(0, 0%, 100%, .2);
@@ -545,6 +592,7 @@
         // top: 4px;
         left: 0;
       }
+
       &.fixed {
         width: 262px;
         position: fixed;
@@ -558,6 +606,7 @@
         transform: translate3d(0, 59px, 0);
         -webkit-transition: -webkit-transform .3s cubic-bezier(.165, .84, .44, 1);
         transition: transform .3s cubic-bezier(.165, .84, .44, 1);
+
         .user {
           &:hover {
             a:before {
@@ -565,6 +614,7 @@
             }
           }
         }
+
         .shop {
           &:hover {
             a:before {
@@ -578,18 +628,22 @@
     .right-box {
       display: flex;
     }
+
     .nav-aside {
       display: flex;
       align-items: center;
     }
+
     // 用户
     .user {
       margin-left: 41px;
       width: 36px;
+
       &:hover {
         a:before {
           background-position: -5px 0;
         }
+
         .nav-user-wrapper {
           top: 18px;
           visibility: visible;
@@ -598,11 +652,13 @@
           transition: opacity .15s ease-out;
         }
       }
-      > a {
+
+      >a {
         position: relative;
         @include wh(36px, 20px);
         display: block;
         text-indent: -9999px;
+
         &:before {
           content: " ";
           position: absolute;
@@ -615,7 +671,8 @@
         }
 
       }
-      li + li {
+
+      li+li {
         text-align: center;
         position: relative;
         border-top: 1px solid #f5f5f5;
@@ -623,20 +680,24 @@
         height: 44px;
         color: #616161;
         font-size: 12px;
+
         &:hover {
           background: #fafafa;
         }
+
         a {
           display: block;
           color: #616161;
         }
       }
+
       .nav-user-avatar {
-        > div {
+        >div {
           position: relative;
           margin: 0 auto 8px;
           @include wh(46px);
           text-align: center;
+
           &:before {
             content: "";
             position: absolute;
@@ -647,6 +708,7 @@
             border-radius: 50%;
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
           }
+
           .avatar {
             border-radius: 50%;
             display: block;
@@ -656,6 +718,7 @@
           }
 
         }
+
         .name {
           margin-bottom: 16px;
           font-size: 12px;
@@ -664,31 +727,37 @@
           color: #757575;
         }
       }
+
       .nav-user-wrapper {
         width: 168px;
         transform: translate(-50%);
         left: 50%;
       }
+
       .nav-user-list {
         width: 168px;
+
         &:before {
           left: 50%;
         }
 
       }
     }
+
     .shop {
       position: relative;
       float: left;
       margin-left: 21px;
       width: 61px;
       z-index: 99;
+
       &:hover {
         a:before {
           content: " ";
           background-position: 0 -22px;
         }
       }
+
       .nav-user-wrapper.active {
         top: 18px;
         visibility: visible;
@@ -696,7 +765,8 @@
         -webkit-transition: opacity .15s ease-out;
         transition: opacity .15s ease-out;
       }
-      > a {
+
+      >a {
         position: absolute;
         left: 0;
         top: 0;
@@ -704,6 +774,7 @@
         display: block;
         right: 0;
         z-index: 1;
+
         &:before {
           display: block;
           @include wh(30px, 100%);
@@ -713,6 +784,7 @@
           background-position: -150px -22px;
         }
       }
+
       .cart-num {
         position: relative;
         display: block;
@@ -721,7 +793,8 @@
         min-width: 30px;
         text-indent: 0;
         line-height: 20px;
-        > i {
+
+        >i {
           background: #eb746b;
           background-image: -webkit-linear-gradient(#eb746b, #e25147);
           background-image: linear-gradient(#eb746b, #e25147);
@@ -734,6 +807,7 @@
           border-radius: 10px;
           color: #fff;
           font-size: 12px;
+
           &.no {
             background: #969696;
             background-image: -webkit-linear-gradient(#A4A4A4, #909090);
@@ -743,55 +817,67 @@
         }
 
       }
+
       .nav-user-wrapper {
         right: 0;
         width: 360px;
+
         .nav-user-list {
           &:before {
             right: 34px;
           }
         }
       }
+
       .nav-user-list {
         padding: 0;
         width: 100%;
+
         .full {
           border-radius: 8px;
           overflow: hidden;
         }
+
         .nav-cart-items {
           max-height: 363px;
           overflow-x: hidden;
           overflow-y: auto;
         }
+
         .cart-item {
           height: 120px;
           width: 100%;
           overflow: hidden;
           border-top: 1px solid #f0f0f0;
+
           &:hover {
             background: #fcfcfc;
+
             .del {
               display: block;
             }
           }
 
         }
+
         li:first-child .cart-item:first-child {
           border-top: none;
           border-radius: 8px 8px 0 0;
           overflow: hidden;
         }
+
         .cart-item-inner {
           padding: 20px;
           position: relative;
         }
+
         .item-thumb {
           position: relative;
           float: left;
           width: 80px;
           height: 80px;
           border-radius: 3px;
+
           &:before {
             content: "";
             position: absolute;
@@ -805,6 +891,7 @@
             box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06);
             border-radius: 3px;
           }
+
           img {
             display: block;
             @include wh(80px, 80px);
@@ -812,10 +899,12 @@
             overflow: hidden;
           }
         }
+
         .item-desc {
           margin-left: 98px;
           display: table;
           @include wh(205px, 80px);
+
           h4 {
             color: #000;
             width: 185px;
@@ -827,6 +916,7 @@
             line-height: 16px;
             margin-bottom: 10px;
           }
+
           .attrs span {
             position: relative;
             display: inline-block;
@@ -835,36 +925,45 @@
             line-height: 14px;
             color: #999;
           }
+
           .attrs span:last-child {
             margin-right: 0;
           }
+
           h6 {
             color: #cacaca;
             font-size: 12px;
             line-height: 14px;
             margin-top: 20px;
+
             span {
               display: inline-block;
               font-weight: 700;
               color: #cacaca;
             }
-            .price-icon, .price-num {
+
+            .price-icon,
+            .price-num {
               color: #d44d44;
             }
+
             .price-num {
               margin-left: 5px;
               font-size: 14px;
             }
+
             .item-num {
               margin-left: 10px;
             }
           }
 
         }
+
         .cart-cell {
           display: table-cell;
           vertical-align: middle;
         }
+
         .del {
           display: none;
           overflow: hidden;
@@ -874,6 +973,7 @@
           transform: translateY(-50%);
         }
       }
+
       .nav-cart-total {
         box-sizing: content-box;
         position: relative;
@@ -885,27 +985,32 @@
         box-shadow: inset 0 -1px 0 hsla(0, 0%, 100%, .5), 0 -3px 8px rgba(0, 0, 0, .04);
         background: -webkit-linear-gradient(#fafafa, #f5f5f5);
         background: linear-gradient(#fafafa, #f5f5f5);
+
         p {
           margin-bottom: 4px;
           line-height: 16px;
           font-size: 12px;
           color: #c1c1c1;
         }
+
         h5 {
           line-height: 20px;
           font-size: 14px;
           color: #6f6f6f;
+
           span {
             font-size: 18px;
             color: #de4037;
             display: inline-block;
             font-weight: 700;
           }
+
           span:first-child {
             font-size: 12px;
             margin-right: 5px;
           }
         }
+
         h6 {
           position: absolute;
           right: 20px;
@@ -942,6 +1047,7 @@
     opacity: 0;
     visibility: hidden;
     top: -3000px;
+
     .nav-user-list {
       position: relative;
       padding-top: 20px;
@@ -951,6 +1057,7 @@
       border-radius: 8px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
       z-index: 10;
+
       &:before {
         position: absolute;
         content: " ";
@@ -969,6 +1076,7 @@
     height: 90px;
     background: #f7f7f7;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+
     &.fixed {
       position: fixed;
       z-index: 21;
@@ -980,16 +1088,19 @@
       background-image: -webkit-linear-gradient(#fff, #f1f1f1);
       background-image: linear-gradient(#fff, #f1f1f1);
     }
+
     .nav-sub-wrapper {
       padding: 31px 0;
       height: 90px;
       position: relative;
+
       &.fixed {
         padding: 0;
         height: 100%;
         display: flex;
         align-items: center;
       }
+
       &:after {
         content: " ";
         position: absolute;
@@ -1005,38 +1116,47 @@
         transition: opacity .3s ease-in;
       }
     }
+
     .w {
       display: flex;
       justify-content: space-between;
     }
+
     .nav-list2 {
       height: 28px;
       line-height: 28px;
       display: flex;
       align-items: center;
       height: 100%;
+
       li:first-child {
         padding-left: 0;
+
         a {
           padding-left: 10px;
         }
       }
+
       li {
         position: relative;
         float: left;
         padding-left: 2px;
+
         a {
           display: block;
           padding: 0 10px;
           color: #666;
+
           &.active {
             font-weight: bold;
           }
         }
+
         a:hover {
           color: #5683EA;
         }
       }
+
       li:before {
         content: ' ';
         position: absolute;
@@ -1059,6 +1179,7 @@
     /*display: flex;*/
     text-align: center;
     position: relative;
+
     p {
       padding-top: 185px;
       color: #333333;
@@ -1079,4 +1200,3 @@
 
   }
 </style>
-

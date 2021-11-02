@@ -19,8 +19,8 @@
                  :class="{'defalut-address':item.isDefault}"></a>
             </div>
             <div class="operation">
-              <el-button type="primary" icon="edit" size="small"  @click="update(item)"></el-button>
-              <el-button type="danger" icon="delete" size="small" :data-id="item.receiverId" @click="del(item.receiverId,i)"></el-button>
+              <el-button type="primary" icon="edit" size="small"  @click="update(item)">修改</el-button>
+              <el-button type="danger" icon="delete" size="small" :data-id="item.receiverId" @click="del(item.receiverId,i)">删除</el-button>
             </div>
           </div>
         </div>

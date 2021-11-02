@@ -4,11 +4,11 @@
       <div slot="content">
         <div v-loading="loading" element-loading-text="加载中..." style="min-height: 10vw;" v-if="bookList.length">
           <div class="orderState" v-if="orderState !== -1 && orderState !== 6">
-            <el-steps :space="200" :active="orderState+2">
-              <el-step title="下单" v-bind:description="orderDate"></el-step>
+            <el-steps :space="200" :active="orderState+2" finish-status="success">
+              <el-step title="下单" ></el-step>
               <el-step title="付款"></el-step>
               <el-step title="运输中"></el-step>
-              <el-step title="交易成功" v-bind:description="finishTime"></el-step>
+              <el-step title="交易成功"></el-step>
             </el-steps>
           </div>
           <div class="status-now" v-if="orderState === 0">
@@ -202,7 +202,7 @@
   @import "../../../assets/style/mixin";
 
   .orderState {
-    display: flex;
+    // display: flex;
     align-items: center;
     flex-direction: row;
     margin: 50px -150px 20px 60px;

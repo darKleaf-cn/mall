@@ -1,12 +1,15 @@
 <template>
   <div>
-    <y-shelf title="账户资料">
+    <y-shelf title="用户信息">
       <div slot="content">
+        <div class="avatar-box">
+          <el-input placeholder="请输入用户名" type="text" v-model="userName" style="width:120px"></el-input>
+          <y-button text="修改用户名" classStyle="main-btn" style="margin-left: 20px;" @btnClick="editUserName()"></y-button>
+        </div>
         <div class="avatar-box">
           <div class=img-box><img :src="userInfo.userImage" alt=""></div>
           <div class="r-box">
-            <h3 style="margin-left: 13px;">修改头像</h3>
-            <y-button text="上传头像" classStyle="main-btn" style="margin: 0;" @btnClick="editAvatar()"></y-button>
+            <y-button text="修改头像" classStyle="main-btn" style="margin: 0;" @btnClick="editAvatar()"></y-button>
           </div>
         </div>
         <div class="edit-avatar" v-if="editAvatarShow">
@@ -102,7 +105,8 @@
           fixed: true
         },
         userId: '',
-        token: ''
+        token: '',
+        userName: ''
       }
     },
     computed: {
@@ -171,6 +175,28 @@
       editAvatar() {
         this.editAvatarShow = true
       },
+      editUserName() {
+        if (!this.userName) {
+          return
+        }
+        updateUserInfo({
+          userId: this.userId,
+          token: this.token,
+          username: this.userName
+        }).then(res => {
+          if (res.code === 200) {
+            this.RECORD_USERINFO({
+              info: res.result
+            })
+            this.editAvatarShow = false
+            this.$router.go(0);
+            this.messageSuccess('修改成功')
+          } else {
+            this.messageFail(res.message)
+          }
+        })
+
+      },
       realTime(data) {
         this.previews = data
         let w = 100 / data.w
@@ -201,7 +227,7 @@
     align-items: center;
 
     .img-box {
-      @include wh(80px);
+      @include wh(100px);
       border-radius: 5px;
       overflow: hidden;
     }
@@ -212,7 +238,7 @@
     }
 
     .r-box {
-      margin-left: 20px;
+      margin-left: 40px;
 
       h3 {
         font-size: 18px;

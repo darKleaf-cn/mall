@@ -223,10 +223,14 @@
           let data = res.result.data
           if (data.length) {
             this.addList = data
-            this.receiverId = data[0].receiverId
-            this.receiverName = data[0].receiverName
-            this.receiverPhone = data[0].receiverPhone
-            this.receiverAddress = data[0].receiverAddress
+            for (let i = 0; i < data.length; i++) {
+              if (i === 0 || data[i].isDefault) {
+                this.receiverId = data[i].receiverId
+                this.receiverName = data[i].receiverName
+                this.receiverPhone = data[i].receiverPhone
+                this.receiverAddress = data[i].receiverAddress
+              }
+            }
           } else {
             this.addList = []
           }
