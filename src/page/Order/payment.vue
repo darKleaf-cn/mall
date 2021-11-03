@@ -1,48 +1,59 @@
 <template>
-  <div class="w" style="padding-bottom: 100px;">
+  <div class="w" style="padding-bottom: 100px">
     <y-shelf title="支付订单">
       <div slot="content">
         <div class="box-inner order-info">
           <h3>提交订单成功，请立即支付</h3>
-          <p class="payment-detail">请在 <span>24 小时内</span>完成支付，超时订单将自动取消。</p>
+          <p class="payment-detail">
+            请在 <span>24 小时内</span>完成支付，超时订单将自动取消。
+          </p>
         </div>
         <!--支付方式-->
         <div class="pay-type">
           <div class="p-title">支付方式</div>
           <div class="pay-item">
-            <div :class="{active:payType==1}" @click="payType=1"><img src="/static/images/alipay@2x.png" alt=""></div>
-            <div :class="{active:payType==2}" @click="payType=2"><img src="/static/images/weixinpay@2x.png" alt="">
+            <div :class="{ active: payType == 1 }" @click="payType = 1">
+              <img src="/static/images/alipay@2x.png" alt="" />
             </div>
-            <div :class="{active:payType==3}" @click="payType=3"><img src="/static/images/qqpay.png" alt=""></div>
+            <div :class="{ active: payType == 2 }" @click="payType = 2">
+              <img src="/static/images/weixinpay@2x.png" alt="" />
+            </div>
+            <div :class="{ active: payType == 3 }" @click="payType = 3">
+              <img src="/static/images/qqpay.png" alt="" />
+            </div>
           </div>
         </div>
 
         <div>
           <div class="box-inner">
             <div>
-              <span>
-                订单金额：
-              </span>
-              <em><span>¥</span>{{orderPrice}}</em>
-              <span>
-                实际应付金额：
-              </span>
-              <em><span>¥</span>{{orderPrice}}</em>
-              <y-button :text="payNow" :classStyle="submit?'main-btn':'disabled-btn'"
-                style="width: 120px;height: 40px;font-size: 16px;line-height: 38px" @btnClick="paySuc()"></y-button>
+              <span> 订单金额： </span>
+              <em><span>¥</span>{{ orderPrice }}</em>
+              <span> 实际应付金额： </span>
+              <em><span>¥</span>{{ orderPrice }}</em>
+              <y-button
+                :text="payNow"
+                :classStyle="submit ? 'main-btn' : 'disabled-btn'"
+                style="
+                  width: 120px;
+                  height: 40px;
+                  font-size: 16px;
+                  line-height: 38px;
+                "
+                @btnClick="paySuc()"
+              ></y-button>
             </div>
           </div>
         </div>
-
       </div>
     </y-shelf>
     <!--地址信息-->
     <div class="p-msg w">
       <div class="confirm-detail">
         <div class="info-title">收货信息</div>
-        <p class="info-detail">姓名：{{receiverName}}</p>
-        <p class="info-detail">联系电话：{{receiverPhone}}</p>
-        <p class="info-detail">详细地址：{{receiverAddress}}</p>
+        <p class="info-detail">姓名：{{ receiverName }}</p>
+        <p class="info-detail">联系电话：{{ receiverPhone }}</p>
+        <p class="info-detail">详细地址：{{ receiverAddress }}</p>
       </div>
     </div>
     <div class="confirm-table-title">
@@ -55,381 +66,384 @@
     </div>
     <!--商品-->
     <div class="confirm-goods-table">
-      <div class="cart-items" v-for="(item,i) in cartList" :key="i">
+      <div class="cart-items" v-for="(item, i) in cartList" :key="i">
         <div class="name">
           <div class="name-cell ellipsis">
-            <a @click="bookDetail(item.bookId)" title="" target="_blank">{{item.name}}</a>
+            <a @click="bookDetail(item.bookId)" title="" target="_blank">{{
+              item.name
+            }}</a>
           </div>
         </div>
         <div class="n-b">
-          <div class="price">¥ {{item.price}}</div>
-          <div class="goods-num">{{item.bookNum}}</div>
+          <div class="price">¥ {{ item.price }}</div>
+          <div class="goods-num">{{ item.bookNum }}</div>
           <div class="subtotal">
-            <div class="subtotal-cell"> ¥ {{item.price * item.bookNum}}<br></div>
+            <div class="subtotal-cell">
+              ¥ {{ item.price * item.bookNum }}<br />
+            </div>
           </div>
         </div>
       </div>
     </div>
     <!--合计-->
     <div class="order-discount-line">
-      <p style="font-size: 14px;font-weight: bolder;"> <span style="padding-right:47px">商品总计：</span>
-        <span style="font-size: 16px;font-weight: 500;line-height: 32px;">¥ {{orderPrice.toFixed(2)}}</span>
+      <p style="font-size: 14px; font-weight: bolder">
+        <span style="padding-right: 47px">商品总计：</span>
+        <span style="font-size: 16px; font-weight: 500; line-height: 32px"
+          >¥ {{ orderPrice.toFixed(2) }}</span
+        >
       </p>
-      <p><span style="padding-right:30px">运费：</span><span style="font-weight: 700;">+ ¥ 0.00</span></p>
+      <p>
+        <span style="padding-right: 30px">运费：</span
+        ><span style="font-weight: 700">+ ¥ 0.00</span>
+      </p>
     </div>
   </div>
 </template>
 <script>
-  import YShelf from '/components/shelf'
-  import YButton from '/components/YButton'
-  import {
-    getOrderDet,
-    payment
-  } from '@/api/goods'
-  import {
-    getStore,
-    setStore
-  } from '/utils/storage'
-  export default {
-    data() {
-      return {
-        payType: 1,
+import YShelf from "/components/shelf";
+import YButton from "/components/YButton";
+import { getOrderDet, payment } from "@/api/goods";
+import { getStore, setStore } from "/utils/storage";
+export default {
+  data() {
+    return {
+      payType: 1,
 
-        cartList: [],
+      cartList: [],
 
-        bookId: '',
+      bookId: "",
 
-        userId: '',
-        orderPrice: 0,
-        receiverName: '',
-        receiverPhone: '',
-        receiverAddress: '',
-        payNow: '立刻支付',
-        submit: true,
+      userId: "",
+      orderPrice: 0,
+      receiverName: "",
+      receiverPhone: "",
+      receiverAddress: "",
+      payNow: "立刻支付",
+      submit: true,
 
-        orderId: '',
-        type: '',
-        maxLength: 30
-      }
-    },
-    computed: {
-      // 选中的总价格
-      checkPrice() {
-        let totalPrice = 0
-        this.cartList && this.cartList.forEach(item => {
-          if (item.checked === '1') {
-            totalPrice += (item.bookNum * item.price)
+      orderId: "",
+      type: "",
+      maxLength: 30,
+    };
+  },
+  computed: {
+    // 选中的总价格
+    checkPrice() {
+      let totalPrice = 0;
+      this.cartList &&
+        this.cartList.forEach((item) => {
+          if (item.checked === "1") {
+            totalPrice += item.bookNum * item.price;
           }
-        })
-        return totalPrice
-      }
+        });
+      return totalPrice;
     },
-    methods: {
-      // checkValid () {
-      //   if (this.nickName !== '' && this.money !== '' && this.isMoney(this.money) && this.email !== '' && this.isEmail(this.email)) {
-      //     this.submit = true
-      //   } else {
-      //     this.submit = false
-      //   }
-      // },
-      messageFail(m) {
-        this.$message.error({
-          message: m
-        })
-      },
-      // changeSelect (v) {
-      //   if (v !== 'custom') {
-      //     this.money = v
-      //   } else {
-      //     this.isCustom = true
-      //     this.money = ''
-      //   }
-      //   this.checkValid()
-      // },
-      bookDetail(id) {
-        window.open(window.location.origin + '#/bookDetail?bookId=' + id)
-      },
-      _getOrderDet(orderId) {
-        let params = {
-          orderId: this.orderId
-        }
-        getOrderDet(params).then(res => {
-          this.cartList = res.result.bookList
-          this.receiverName = res.result.receiverName
-          this.receiverPhone = res.result.receiverPhone
-          this.receiverAddress = res.result.receiverAddress
-          this.orderPrice = res.result.orderPrice
-        })
-      },
-      paySuc() {
-        this.payNow = '支付中...'
-        this.submit = false
-        if (this.payType === 1) {
-          this.type = 'Alipay'
-        } else if (this.payType === 2) {
-          this.type = 'Wechat'
-        } else if (this.payType === 3) {
-          this.type = 'QQ'
-        } else {
-          this.type = '其它'
-        }
-        payment({
-          orderId: this.orderId,
-          userId: this.userId,
-          payType: this.type
-        }).then(res => {
-          if (res.code === 200) {
-            this.$router.push(({
-              path: '/order/paysuccess',
-              query: {
-                price: this.orderPrice
-              }
-            }))
-          } else {
-            this.payNow = '立刻支付'
-            this.submit = true
-            this.messageFail(res.message)
-          }
-        })
-      },
+  },
+  methods: {
+    // checkValid () {
+    //   if (this.nickName !== '' && this.money !== '' && this.isMoney(this.money) && this.email !== '' && this.isEmail(this.email)) {
+    //     this.submit = true
+    //   } else {
+    //     this.submit = false
+    //   }
+    // },
+    messageFail(m) {
+      this.$message.error({
+        message: m,
+      });
     },
-    created() {
-      this.userId = getStore('userId')
-      this.orderId = this.$route.query.orderId
-      if (this.orderId) {
-        this._getOrderDet(this.orderId)
+    // changeSelect (v) {
+    //   if (v !== 'custom') {
+    //     this.money = v
+    //   } else {
+    //     this.isCustom = true
+    //     this.money = ''
+    //   }
+    //   this.checkValid()
+    // },
+    bookDetail(id) {
+      window.open(window.location.origin + "#/bookDetail?bookId=" + id);
+    },
+    _getOrderDet(orderId) {
+      let params = {
+        orderId: this.orderId,
+      };
+      getOrderDet(params).then((res) => {
+        this.cartList = res.result.bookList;
+        this.receiverName = res.result.receiverName;
+        this.receiverPhone = res.result.receiverPhone;
+        this.receiverAddress = res.result.receiverAddress;
+        this.orderPrice = res.result.orderPrice;
+      });
+    },
+    paySuc() {
+      this.payNow = "支付中...";
+      this.submit = false;
+      if (this.payType === 1) {
+        this.type = "Alipay";
+      } else if (this.payType === 2) {
+        this.type = "Wechat";
+      } else if (this.payType === 3) {
+        this.type = "QQ";
       } else {
-        this.$router.push({
-          path: '/'
-        })
+        this.type = "其它";
       }
+      payment({
+        orderId: this.orderId,
+        userId: this.userId,
+        payType: this.type,
+      }).then((res) => {
+        if (res.code === 200) {
+          this.$router.push({
+            path: "/order/paysuccess",
+            query: {
+              price: this.orderPrice,
+            },
+          });
+        } else {
+          this.payNow = "立刻支付";
+          this.submit = true;
+          this.messageFail(res.message);
+        }
+      });
     },
-    components: {
-      YShelf,
-      YButton
+  },
+  created() {
+    this.userId = getStore("userId");
+    this.orderId = this.$route.query.orderId;
+    if (this.orderId) {
+      this._getOrderDet(this.orderId);
+    } else {
+      this.$router.push({
+        path: "/",
+      });
     }
-  }
+  },
+  components: {
+    YShelf,
+    YButton,
+  },
+};
 </script>
 <style lang="scss" scoped rel="stylesheet/scss">
-  .w {
-    padding-top: 39px;
+.w {
+  padding-top: 39px;
+}
+
+.order-info {
+  padding: 60px 0 55px;
+  color: #333;
+  background: #fff !important;
+
+  h3 {
+    padding-bottom: 14px;
+    line-height: 36px;
+    text-align: center;
+    font-size: 36px;
+    color: #212121;
   }
 
-  .order-info {
-    padding: 60px 0 55px;
-    color: #333;
-    background: #fff !important;
+  .payment-detail {
+    text-align: center;
+    line-height: 24px;
+    font-size: 14px;
+    color: #999;
+  }
+}
 
-    h3 {
-      padding-bottom: 14px;
-      line-height: 36px;
-      text-align: center;
-      font-size: 36px;
-      color: #212121;
-    }
+/*支付类型*/
+.pay-type {
+  margin: 0 auto;
+  width: 90%;
+  padding-bottom: 30px;
 
-    .payment-detail {
-      text-align: center;
-      line-height: 24px;
-      font-size: 14px;
-      color: #999;
+  .p-title {
+    font-size: 18px;
+    line-height: 40px;
+    padding: 0 10px;
+    position: relative;
+
+    &:before {
+      content: " ";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-bottom: 1px solid #ccc;
     }
   }
+}
 
-  /*支付类型*/
-  .pay-type {
-    margin: 0 auto;
-    width: 90%;
-    padding-bottom: 30px;
-
-    .p-title {
-      font-size: 18px;
-      line-height: 40px;
-      padding: 0 10px;
-      position: relative;
-
-      &:before {
-        content: ' ';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        border-bottom: 1px solid #ccc;
-      }
-    }
-
-  }
-
-  .pay-type {
-    .pay-item {
-      display: flex;
-      align-items: center;
-
-      div {
-        margin-top: 20px;
-        width: 175px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #E5E5E5;
-        cursor: pointer;
-        border-radius: 6px;
-        margin-right: 10px;
-        background: #FAFAFA;
-
-        &.active {
-          border-color: #6A8FE5;
-          background: #fff;
-        }
-
-        img {
-          display: block;
-          height: 34px;
-          margin: 8px auto;
-        }
-      }
-    }
-  }
-
-  .box-inner {
-    line-height: 60px;
-    background: #f9f9f9;
-    border-top: 1px solid #e5e5e5;
-    box-sizing: border-box;
-
-    >div {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 0 20px;
-    }
-
-    em {
-      margin-left: 5px;
-      font-size: 24px;
-      color: #d44d44;
-      font-weight: 700;
-      margin-right: 20px;
-
-      span {
-        margin-right: 4px;
-        font-size: 16px;
-
-      }
-    }
-  }
-
-  .confirm-detail {
-    padding: 0 30px 25px;
-    border-top: 1px solid #d5d5d5;
-
-    .info-title {
-      height: 14px;
-      margin: 30px 0 17px;
-      line-height: 14px;
-      font-weight: bolder;
-      color: #333;
-    }
-
-    .info-detail {
-      line-height: 24px;
-      color: #666;
-    }
-  }
-
-  .confirm-table-title {
-    padding: 3px 0 0 33px;
-    border-top: 1px solid #D5D5D5;
-    line-height: 54px;
-    font-weight: bolder;
-    color: #000;
+.pay-type {
+  .pay-item {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
 
-    span {
-      display: inline-block;
+    div {
+      margin-top: 20px;
       width: 175px;
-      text-align: left;
-    }
-
-    .price {
-      padding-left: 80px;
-    }
-
-    .num {
-      padding-left: 75px;
-    }
-
-    .subtotal {
-      padding-left: 72px;
-    }
-  }
-
-  .confirm-goods-table {
-    border-top: 1px solid #D5D5D5;
-
-    .cart-items {
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      a {
-        color: #333;
-      }
-    }
-
-    .n-b {
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 1px solid #e5e5e5;
+      cursor: pointer;
+      border-radius: 6px;
+      margin-right: 10px;
+      background: #fafafa;
 
-      >div {
-        color: #626262;
-        font-weight: 700;
-        width: 175px;
-        text-align: center;
+      &.active {
+        border-color: #6a8fe5;
+        background: #fff;
+      }
+
+      img {
+        display: block;
+        height: 34px;
+        margin: 8px auto;
       }
     }
   }
+}
 
-  .order-discount-line {
-    padding: 22px 30px 53px;
-    border-top: 1px solid #D5D5D5;
+.box-inner {
+  line-height: 60px;
+  background: #f9f9f9;
+  border-top: 1px solid #e5e5e5;
+  box-sizing: border-box;
+
+  > div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  em {
+    margin-left: 5px;
+    font-size: 24px;
+    color: #d44d44;
+    font-weight: 700;
+    margin-right: 20px;
+
+    span {
+      margin-right: 4px;
+      font-size: 16px;
+    }
+  }
+}
+
+.confirm-detail {
+  padding: 0 30px 25px;
+  border-top: 1px solid #d5d5d5;
+
+  .info-title {
+    height: 14px;
+    margin: 30px 0 17px;
+    line-height: 14px;
+    font-weight: bolder;
+    color: #333;
+  }
+
+  .info-detail {
     line-height: 24px;
-    text-align: right;
-    font-size: 12px;
+    color: #666;
+  }
+}
 
-    &:first-child {
-      line-height: 32px;
-      text-align: right;
-      font-size: 14px;
-      font-weight: bolder;
+.confirm-table-title {
+  padding: 3px 0 0 33px;
+  border-top: 1px solid #d5d5d5;
+  line-height: 54px;
+  font-weight: bolder;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    display: inline-block;
+    width: 175px;
+    text-align: left;
+  }
+
+  .price {
+    padding-left: 80px;
+  }
+
+  .num {
+    padding-left: 75px;
+  }
+
+  .subtotal {
+    padding-left: 72px;
+  }
+}
+
+.confirm-goods-table {
+  border-top: 1px solid #d5d5d5;
+
+  .cart-items {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    a {
+      color: #333;
     }
   }
 
-  .name {
-    width: 40%;
-  }
+  .n-b {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  .name-cell {
-    padding-left: 33px;
+    > div {
+      color: #626262;
+      font-weight: 700;
+      width: 175px;
+      text-align: center;
+    }
   }
+}
 
-  .input {
-    width: 30%;
-    margin: 0 0 1vw 38px;
-  }
+.order-discount-line {
+  padding: 22px 30px 53px;
+  border-top: 1px solid #d5d5d5;
+  line-height: 24px;
+  text-align: right;
+  font-size: 12px;
 
-  .pay-info {
-    margin-top: -2vw;
-    text-align: center;
+  &:first-child {
+    line-height: 32px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: bolder;
   }
+}
 
-  .money-select {
-    width: 31%;
-    padding-left: 10px;
-    margin-bottom: 1vw;
-  }
+.name {
+  width: 40%;
+}
+
+.name-cell {
+  padding-left: 33px;
+}
+
+.input {
+  width: 30%;
+  margin: 0 0 1vw 38px;
+}
+
+.pay-info {
+  margin-top: -2vw;
+  text-align: center;
+}
+
+.money-select {
+  width: 31%;
+  padding-left: 10px;
+  margin-bottom: 1vw;
+}
 </style>
