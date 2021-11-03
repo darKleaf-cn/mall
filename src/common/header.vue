@@ -152,9 +152,7 @@
     getStore,
     removeStore
   } from '/utils/storage'
-  // import store from '../store/'
-  // import 'element-ui/lib/theme-default/index.css'
-  // import 'element-ui/lib/theme-chalk/index.css';
+  import data from '../assets/json/index.json'
   export default {
     data() {
       return {
@@ -171,7 +169,7 @@
         searchResults: [],
         timeout: null,
         token: '',
-        navList: config.navList
+        navList: data.navList
       }
     },
     computed: {

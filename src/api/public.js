@@ -3,7 +3,7 @@ axios.defaults.timeout = 10000
 axios.defaults.headers.post['Content-Type'] = 'application/x-www=form-urlencoded'
 export default {
   fetchGet (url, params = {}) {
-    url = config.url + url;
+    url = process.env.VUE_APP_URL + url;
     return new Promise((resolve, reject) => {
       axios.get(url, params).then(res => {
         resolve(res.data)
@@ -13,7 +13,7 @@ export default {
     })
   },
   fetchPost (url, params = {}) {
-    url = config.url + url;
+    url = process.env.VUE_APP_URL + url;
     return new Promise((resolve, reject) => {
       axios.post(url, params).then(res => {
         resolve(res.data)

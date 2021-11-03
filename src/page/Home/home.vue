@@ -69,15 +69,12 @@
   import YShelf from '/components/shelf'
   // import product from '/components/product'
   import mallGoods from '/components/mallGoods'
-  import {
-    setStore,
-    getStore
-  } from '/utils/storage.js'
+  import data from '../../assets/json/index.json'
   export default {
     data() {
       return {
         error: false,
-        banner: config.banner,
+        banner: data.banner,
         mark: 0,
         bgOpt: {
           px: 0,
