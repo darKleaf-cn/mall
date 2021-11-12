@@ -20,9 +20,7 @@ Vue.use(VueLazyload, {
 const whiteList = ['/home', '/book', '/login', '/register', '/bookDetail', '/thanks', '/search', '/refreshsearch', '/refreshgoods'] // 不需要登陆的页面
 router.beforeEach(function (to, from, next) {
   let params = {
-    params: {
-      token: getStore('token')
-    }
+    token: getStore('token')
   }
   userInfo(params).then(res => {
     if (res.code !== 200) { // 没登录
@@ -34,7 +32,7 @@ router.beforeEach(function (to, from, next) {
     } else {
       store.commit('RECORD_USERINFO', res.result)
       if (to.path === '/login') { //  跳转到
-        next({path: '/'})
+        next({ path: '/' })
       }
       next()
     }
