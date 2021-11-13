@@ -1,7 +1,10 @@
 <template>
   <div class="login v2">
     <div class="wrapper">
-      <div class="dialog dialog-shadow" style="display: block; margin-top: -362px;">
+      <div
+        class="dialog dialog-shadow"
+        style="display: block; margin-top: -362px"
+      >
         <div class="title">
           <h4>使用 mall 账号 登录</h4>
         </div>
@@ -9,30 +12,65 @@
           <ul class="common-form">
             <li class="username border-1p">
               <div class="input">
-                <input type="text" v-model="ruleForm.userName" placeholder="账号">
+                <input
+                  type="text"
+                  v-model="ruleForm.userName"
+                  placeholder="账号"
+                />
               </div>
             </li>
             <li>
               <div class="input">
-                <input type="password" v-model="ruleForm.userPwd" @keyup.enter="login" placeholder="密码">
+                <input
+                  type="password"
+                  v-model="ruleForm.userPwd"
+                  @keyup.enter="login"
+                  placeholder="密码"
+                />
               </div>
             </li>
             <li style="text-align: right" class="pr">
-              <el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>
-              <a href="javascript:;" class="register" @click="toRegister">注册 mall 账号</a>
+              <el-checkbox class="auto-login" v-model="autoLogin"
+                >记住密码</el-checkbox
+              >
+              <a href="javascript:;" class="register" @click="toRegister"
+                >注册 mall 账号</a
+              >
             </li>
           </ul>
           <!--登陆-->
           <div style="margin-top: 25px">
-            <y-button :text="logintxt"
-                      :classStyle="ruleForm.userPwd&& ruleForm.userName&& logintxt === '登录'?'main-btn':'disabled-btn'"
-                      @btnClick="login"
-                      style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"></y-button>
+            <y-button
+              :text="logintxt"
+              :classStyle="
+                ruleForm.userPwd && ruleForm.userName && logintxt === '登录'
+                  ? 'main-btn'
+                  : 'disabled-btn'
+              "
+              @btnClick="login"
+              style="
+                margin: 0;
+                width: 100%;
+                height: 48px;
+                font-size: 18px;
+                line-height: 48px;
+              "
+            ></y-button>
           </div>
           <!--返回-->
           <div>
-            <y-button text="返回" @btnClick="login_back"
-              style="marginTop: 10px;marginBottom: 15px;width: 100%;height: 48px;font-size: 18px;line-height: 48px">
+            <y-button
+              text="返回"
+              @btnClick="login_back"
+              style="
+                margintop: 10px;
+                marginbottom: 15px;
+                width: 100%;
+                height: 48px;
+                font-size: 18px;
+                line-height: 48px;
+              "
+            >
             </y-button>
           </div>
         </div>
@@ -41,146 +79,146 @@
   </div>
 </template>
 <script>
-import YButton from '/components/YButton'
-import { userLogin } from '@/api/index.js'
-import { addCart } from '@/api/goods.js'
-import { setStore, getStore, removeStore } from '/utils/storage.js'
+import YButton from "/components/YButton";
+import { userLogin } from "@/api/index.js";
+import { addCart } from "@/api/goods.js";
+import { setStore, getStore, removeStore } from "/utils/storage.js";
 export default {
-  data () {
+  data() {
     return {
       cart: [],
       loginPage: true,
       ruleForm: {
-        userName: '',
-        userPwd: '',
-        errMsg: ''
+        userName: "",
+        userPwd: "",
+        errMsg: "",
       },
       registered: {
-        userName: '',
-        userPwd: '',
-        userPwd2: '',
-        errMsg: ''
+        userName: "",
+        userPwd: "",
+        userPwd2: "",
+        errMsg: "",
       },
       autoLogin: false,
-      logintxt: '登录',
-      statusKey: ''
-    }
+      logintxt: "登录",
+      statusKey: "",
+    };
   },
   computed: {
-    count () {
-      return this.$store.state.login
-    }
+    count() {
+      return this.$store.state.login;
+    },
   },
   methods: {
-    open (t, m) {
+    open(t, m) {
       this.$notify.info({
         title: t,
-        message: m
-      })
+        message: m,
+      });
     },
-    messageSuccess () {
+    messageSuccess() {
       this.$message({
-        message: '恭喜您，注册成功！赶紧登录体验吧',
-        type: 'success'
-      })
+        message: "恭喜您，注册成功！赶紧登录体验吧",
+        type: "success",
+      });
     },
-    message (m) {
+    message(m) {
       this.$message.error({
-        message: m
-      })
+        message: m,
+      });
     },
-    getRemembered () {
-      var judge = getStore('remember')
-      if (judge === 'true') {
-        this.autoLogin = true
-        this.ruleForm.userName = getStore('rusername')
-        this.ruleForm.userPwd = getStore('rpassword')
+    getRemembered() {
+      var judge = getStore("remember");
+      if (judge === "true") {
+        this.autoLogin = true;
+        this.ruleForm.userName = getStore("rusername");
+        this.ruleForm.userPwd = getStore("rpassword");
       }
     },
-    rememberPass () {
+    rememberPass() {
       if (this.autoLogin === true) {
-        setStore('remember', 'true')
-        setStore('rusername', this.ruleForm.userName)
-        setStore('rpassword', this.ruleForm.userPwd)
+        setStore("remember", "true");
+        setStore("rusername", this.ruleForm.userName);
+        setStore("rpassword", this.ruleForm.userPwd);
       } else {
-        setStore('remember', 'false')
-        removeStore('rusername')
-        removeStore('rpassword')
+        setStore("remember", "false");
+        removeStore("rusername");
+        removeStore("rpassword");
       }
     },
-    toRegister () {
+    toRegister() {
       this.$router.push({
-        path: '/register'
-      })
+        path: "/register",
+      });
     },
     // 登录返回按钮
-    login_back () {
-      this.$router.go(-1)
+    login_back() {
+      this.$router.go(-1);
     },
     // 登陆时将本地的添加到用户购物车
-    login_addCart () {
-      let cartArr = []
-      let locaCart = JSON.parse(getStore('buyCart'))
+    login_addCart() {
+      let cartArr = [];
+      let locaCart = JSON.parse(getStore("buyCart"));
       if (locaCart && locaCart.length) {
-        locaCart.forEach(item => {
+        locaCart.forEach((item) => {
           cartArr.push({
-            userId: getStore('userId'),
+            userId: getStore("userId"),
             bookId: item.bookId,
-            bookNum: item.bookNum
-          })
-        })
+            bookNum: item.bookNum,
+          });
+        });
       }
-      this.cart = cartArr
+      this.cart = cartArr;
     },
-    login () {
-      this.logintxt = '登录中...'
-      this.rememberPass()
+    login() {
+      this.logintxt = "登录中...";
+      this.rememberPass();
       if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
         // this.ruleForm.errMsg = '账号或者密码不能为空!'
-        this.message('账号或者密码不能为空!')
-        return false
+        this.message("账号或者密码不能为空!");
+        return false;
       }
       var params = {
         userName: this.ruleForm.userName,
         userPwd: this.ruleForm.userPwd,
-      }
-      userLogin(params).then(res => {
+      };
+      userLogin(params).then((res) => {
         if (res.code == 200) {
-          setStore('token', res.result.token)
-          setStore('userId', res.result.userId)
+          setStore("token", res.result.token);
+          setStore("userId", res.result.userId);
           // 登录后添加当前缓存中的购物车
           if (this.cart.length) {
             for (var i = 0; i < this.cart.length; i++) {
-              addCart(this.cart[i]).then(res => {
+              addCart(this.cart[i]).then((res) => {
                 if (res.code === 200) {
                 }
-              })
+              });
             }
-            removeStore('buyCart')
+            removeStore("buyCart");
             this.$router.push({
-              path: '/'
-            })
+              path: "/",
+            });
           } else {
             this.$router.push({
-              path: '/'
-            })
+              path: "/",
+            });
           }
         } else {
-          this.logintxt = '登录'
-          this.message(res.message)
-          return false
+          this.logintxt = "登录";
+          this.message(res.message);
+          return false;
         }
-      })
+      });
     },
   },
-  mounted () {
-    this.getRemembered()
-    this.login_addCart()
+  mounted() {
+    this.getRemembered();
+    this.login_addCart();
   },
   components: {
-    YButton
-  }
-}
+    YButton,
+  },
+};
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 * {

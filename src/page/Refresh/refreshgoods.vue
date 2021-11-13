@@ -1,22 +1,19 @@
 <template>
-<div></div>
+  <div></div>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     this.$router.push({
-      path: '/book',
+      path: "/book",
       query: {
-        type: this.$route.query.type
-      }
-    })
-    return {
-    }
+        type: this.$route.query.type,
+      },
+    });
+    return {};
   },
-  methods: {
-  }
-}
+  methods: {},
+};
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-  
 </style>

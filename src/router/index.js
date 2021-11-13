@@ -11,10 +11,10 @@ const order = () => import('../page/Order/order.vue')
 const user = () => import('../page/User/user.vue')
 const orderList = () => import('../page/User/children/order.vue')
 const information = () => import('../page/User/children/information.vue')
-const addressList = () => import('../page/User/children/addressList.vue')
-const coupon = () => import('../page/User/children/coupon.vue')
-const aihuishou = () => import('../page/User/children/aihuishou.vue')
-const support = () => import('../page/User/children/support.vue')
+const receiverList = () => import('../page/User/children/receiverList.vue')
+// const coupon = () => import('../page/User/children/coupon.vue')
+// const aihuishou = () => import('../page/User/children/aihuishou.vue')
+// const support = () => import('../page/User/children/support.vue')
 const checkout = () => import('../page/Checkout/checkout.vue')
 const payment = () => import('../page/Order/payment.vue')
 const paysuccess = () => import('../page/Order/paysuccess.vue')
@@ -23,9 +23,6 @@ const Search = () => import('../page/Search/search.vue')
 const RefreshSearch = () => import('../page/Refresh/refreshsearch.vue')
 const RefreshGoods = () => import('../page/Refresh/refreshgoods.vue')
 const orderDetail = () => import('../page/User/children/orderDetail.vue')
-const Alipay = () => import('../page/Order/alipay.vue')
-const Wechat = () => import('../page/Order/wechat.vue')
-const QQpay = () => import('../page/Order/qqpay.vue')
 Vue.use(Router)
 
 import VueRouter from 'vue-router';
@@ -72,9 +69,6 @@ export default new Router({
         {path: 'paysuccess', name: 'paysuccess', component: paysuccess},
         {path: 'payment', name: 'payment', component: payment},
         {path: '/search', name: 'search', component: Search},
-        {path: 'alipay', name: 'alipay', component: Alipay},
-        {path: 'wechat', name: 'wechat', component: Wechat},
-        {path: 'qqpay', name: 'qqpay', component: QQpay}
       ]
     },
     {
@@ -86,10 +80,7 @@ export default new Router({
         {path: 'orderList', name: '订单列表', component: orderList},
         {path: 'orderDetail', name: '订单详情', component: orderDetail},
         {path: 'information', name: '账户资料', component: information},
-        {path: 'addressList', name: '收货地址', component: addressList},
-        {path: 'coupon', name: '我的优惠', component: coupon},
-        {path: 'support', name: '售后服务', component: support},
-        {path: 'aihuishou', name: '以旧换新', component: aihuishou}
+        {path: 'receiverList', name: '收货信息', component: receiverList},
       ]
     },
     {path: '/checkout', name: 'checkout', component: checkout},
