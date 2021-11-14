@@ -58,7 +58,7 @@ export default {
           addCart({ userId: getStore("userId"), bookId: id, bookNum: 1 }).then(
             (res) => {
               // 并不重新请求数据
-              if (res.code === 200) {
+              if (res.rtnCode === "200") {
                 this.ADD_CART({
                   bookId: id,
                   price: price,

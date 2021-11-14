@@ -11,7 +11,7 @@
           <div class="orderState" v-if="orderState !== -1 && orderState !== 6">
             <el-steps
               :space="200"
-              :active="orderState + 2"
+              :active="orderState === 2 ? orderState + 2 : orderState +1"
               finish-status="success"
             >
               <el-step title="下单"></el-step>
@@ -180,10 +180,10 @@ export default {
         orderId: this.orderId,
       };
       getOrderDet(params).then((res) => {
-        if (res.code === 200) {
+        if (res.rtnCode === "200") {
           const data = res.result;
-          this.orderState = data.orderState;
-          this.bookList = data.bookList;
+          this.orderState = parseInt(data.orderState);
+          this.bookList = [data];
           this.orderPrice = data.orderPrice;
           this.receiverName = data.receiverName;
           this.receiverPhone = data.receiverPhone;
@@ -203,7 +203,7 @@ export default {
         userId: this.userId,
         orderId: this.orderId,
       }).then((res) => {
-        if (res.code == 200) {
+        if (res.rtnCode == "200") {
           this.$router.push({
             path: "orderList",
           });

@@ -122,7 +122,7 @@ export default {
       payNow: "立刻支付",
       submit: true,
 
-      orderId: "",
+      orderId: [],
       type: "",
       maxLength: 30,
     };
@@ -165,17 +165,25 @@ export default {
     bookDetail(id) {
       window.open(window.location.origin + "#/bookDetail?bookId=" + id);
     },
-    _getOrderDet(orderId) {
-      let params = {
-        orderId: this.orderId,
-      };
-      getOrderDet(params).then((res) => {
-        this.cartList = res.result.bookList;
-        this.receiverName = res.result.receiverName;
-        this.receiverPhone = res.result.receiverPhone;
-        this.receiverAddress = res.result.receiverAddress;
-        this.orderPrice = res.result.orderPrice;
-      });
+    _getOrderDet() {
+      for (let orderId of this.orderId) {
+        let params = {
+          orderId: orderId,
+          userId: this.userId,
+        };
+        getOrderDet(params).then((res) => {
+          this.cartList.push({
+            name:res.result.bookName,
+            bookId:res.result.bookId,
+            bookNum:res.result.bookNum,
+            price:res.result.price
+          });
+          this.receiverName = res.result.receiverName;
+          this.receiverPhone = res.result.receiverPhone;
+          this.receiverAddress = res.result.receiverAddress;
+          this.orderPrice = res.result.orderPrice;
+        });
+      }
     },
     paySuc() {
       this.payNow = "支付中...";
@@ -194,7 +202,7 @@ export default {
         userId: this.userId,
         payType: this.type,
       }).then((res) => {
-        if (res.code === 200) {
+        if (res.rtnCode === "200") {
           this.$router.push({
             path: "/order/paysuccess",
             query: {
@@ -211,9 +219,10 @@ export default {
   },
   created() {
     this.userId = getStore("userId");
-    this.orderId = this.$route.query.orderId;
+    this.orderId = this.$route.query.orderId.split(",");
+    this.orderId.pop();
     if (this.orderId) {
-      this._getOrderDet(this.orderId);
+      this._getOrderDet();
     } else {
       this.$router.push({
         path: "/",

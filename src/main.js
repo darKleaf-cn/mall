@@ -23,7 +23,7 @@ router.beforeEach(function (to, from, next) {
     token: getStore('token')
   }
   userInfo(params).then(res => {
-    if (res.code !== 200) { // 没登录
+    if (res.rtnCode !== "200") { // 没登录
       if (whiteList.indexOf(to.path) !== -1) { // 白名单
         next()
       } else {

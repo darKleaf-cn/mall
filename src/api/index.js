@@ -5,11 +5,11 @@ export const userLogin = (params) => {
 }
 // 退出登陆
 export const logout = (params) => {
-  return http.fetchGet('/user/logout', params)
+  return http.fetchPost('/user/logout', params)
 }
 // 用户信息
 export const userInfo = (params) => {
-  return http.fetchGet('/user/userinfo', params)
+  return http.fetchPost('/user/userinfo', params)
 }
 // 注册账号
 export const register = (params) => {
@@ -21,6 +21,6 @@ export const updateUserInfo = (params) => {
 }
 // 首页接口
 export const productHome = (params) => {
-  return http.fetchGet('/book/home', params)
+  return http.fetchPost('/book/home', params)
 }
 

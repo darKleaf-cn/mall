@@ -1,11 +1,11 @@
 import http from './public'
 // 商品列表
 export const bookQueryList = (params) => {
-  return http.fetchGet('/book/queryList', params)
+  return http.fetchPost('/book/queryList', params)
 }
 // 商品详情
 export const productDet = (params) => {
-  return http.fetchGet('/book/detail', params)
+  return http.fetchPost('/book/detail', params)
 }
 
 // 获取购物车列表
@@ -49,7 +49,7 @@ export const payment = (params) => {
 }
 // 获取用户订单
 export const orderList = (params) => {
-  return http.fetchPost('/order/list', params)
+  return http.fetchPost('/order/queryList', params)
 }
 // 获取订单详情
 export const getOrderDet = (params) => {

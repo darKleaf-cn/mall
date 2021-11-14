@@ -22,10 +22,10 @@
                 <div class="input">
                   <input
                     type="text"
-                    v-model="registered.userName"
+                    v-model="registered.username"
                     placeholder="用户名"
                     @keyup="
-                      registered.userName = registered.userName.replace(
+                      registered.username = registered.username.replace(
                         /[^\w\.\/]/gi,
                         ''
                       )
@@ -79,7 +79,7 @@
                 :classStyle="
                   registered.password &&
                   registered.password2 &&
-                  registered.userName &&
+                  registered.username &&
                   registxt === '注册'
                     ? 'main-btn'
                     : 'disabled-btn'
@@ -131,13 +131,13 @@ export default {
       cart: [],
       loginPage: true,
       ruleForm: {
-        userName: "",
+        username: "",
         password: "",
         errMsg: "",
       },
       registered: {
         phone: "",
-        userName: "",
+        username: "",
         password: "",
         password2: "",
         errMsg: "",
@@ -177,7 +177,7 @@ export default {
     regist() {
       this.registxt = "注册中...";
       let phone = this.registered.phone;
-      let userName = this.registered.userName;
+      let username = this.registered.username;
       let password = this.registered.password;
       let password2 = this.registered.password2;
       let myreg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
@@ -185,7 +185,7 @@ export default {
         this.message("请输入正确的手机号!");
         return false;
       }
-      if (!phone || !userName || !password || !password2) {
+      if (!phone || !username || !password || !password2) {
         this.message("手机号、用户名或密码不能为空!");
         this.registxt = "注册";
         return false;
@@ -202,10 +202,10 @@ export default {
       }
       register({
         phone,
-        userName,
+        username,
         password,
       }).then((res) => {
-        if (res.code == 200) {
+        if (res.rtnCode == "200") {
           this.messageSuccess();
           this.toLogin();
         } else {

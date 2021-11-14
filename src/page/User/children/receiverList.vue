@@ -161,7 +161,7 @@ export default {
     },
     _addReceiver(params) {
       addReceiver(params).then((res) => {
-        if (res.code === 200) {
+        if (res.rtnCode === "200") {
           this._receiverList();
         } else {
           this.message(res.message);
@@ -187,8 +187,8 @@ export default {
     },
     // 删除
     del(receiverId, i) {
-      delReceiver({ receiverId: receiverId }).then((res) => {
-        if (res.code === 200) {
+      delReceiver({ receiverId: receiverId,userId:this.userId }).then((res) => {
+        if (res.rtnCode === "200") {
           this.addList.splice(i, 1);
         } else {
           this.message("删除失败");

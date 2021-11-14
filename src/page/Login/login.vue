@@ -14,7 +14,7 @@
               <div class="input">
                 <input
                   type="text"
-                  v-model="ruleForm.userName"
+                  v-model="ruleForm.username"
                   placeholder="账号"
                 />
               </div>
@@ -43,7 +43,7 @@
             <y-button
               :text="logintxt"
               :classStyle="
-                ruleForm.userPwd && ruleForm.userName && logintxt === '登录'
+                ruleForm.userPwd && ruleForm.username && logintxt === '登录'
                   ? 'main-btn'
                   : 'disabled-btn'
               "
@@ -89,12 +89,12 @@ export default {
       cart: [],
       loginPage: true,
       ruleForm: {
-        userName: "",
+        username: "",
         userPwd: "",
         errMsg: "",
       },
       registered: {
-        userName: "",
+        username: "",
         userPwd: "",
         userPwd2: "",
         errMsg: "",
@@ -131,14 +131,14 @@ export default {
       var judge = getStore("remember");
       if (judge === "true") {
         this.autoLogin = true;
-        this.ruleForm.userName = getStore("rusername");
+        this.ruleForm.username = getStore("rusername");
         this.ruleForm.userPwd = getStore("rpassword");
       }
     },
     rememberPass() {
       if (this.autoLogin === true) {
         setStore("remember", "true");
-        setStore("rusername", this.ruleForm.userName);
+        setStore("rusername", this.ruleForm.username);
         setStore("rpassword", this.ruleForm.userPwd);
       } else {
         setStore("remember", "false");
@@ -173,24 +173,24 @@ export default {
     login() {
       this.logintxt = "登录中...";
       this.rememberPass();
-      if (!this.ruleForm.userName || !this.ruleForm.userPwd) {
+      if (!this.ruleForm.username || !this.ruleForm.userPwd) {
         // this.ruleForm.errMsg = '账号或者密码不能为空!'
         this.message("账号或者密码不能为空!");
         return false;
       }
       var params = {
-        userName: this.ruleForm.userName,
-        userPwd: this.ruleForm.userPwd,
+        username: this.ruleForm.username,
+        password: this.ruleForm.userPwd,
       };
       userLogin(params).then((res) => {
-        if (res.code == 200) {
+        if (res.rtnCode == "200") {
           setStore("token", res.result.token);
           setStore("userId", res.result.userId);
           // 登录后添加当前缓存中的购物车
           if (this.cart.length) {
             for (var i = 0; i < this.cart.length; i++) {
               addCart(this.cart[i]).then((res) => {
-                if (res.code === 200) {
+                if (res.rtnCode === "200") {
                 }
               });
             }

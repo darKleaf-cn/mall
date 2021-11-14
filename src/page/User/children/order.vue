@@ -34,7 +34,7 @@
               </div>
             </div>
             <div class="pr">
-              <div class="cart" v-for="(book, j) in item.bookList" :key="j">
+              <div class="cart" v-for="(book, j) in [item]" :key="j">
                 <div class="cart-l" :class="{ bt: j > 0 }">
                   <div class="car-l-l">
                     <div class="img-box">
@@ -162,11 +162,11 @@ export default {
       });
     },
     getOrderStatus(status) {
-      if (status === 0) {
+      if (status === '0') {
         return "待付款";
-      } else if (status === 1) {
+      } else if (status === '1') {
         return "运输中";
-      } else if (status === 2) {
+      } else if (status === '2') {
         return "交易完成";
       } else {
         return "交易失败";
@@ -190,7 +190,7 @@ export default {
         orderId: orderId,
       };
       delOrder(params).then((res) => {
-        if (res.code === 200) {
+        if (res.rtnCode === "200") {
           this.orderList.splice(i, 1);
         } else {
           this.message("删除失败");

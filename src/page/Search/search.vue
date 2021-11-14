@@ -139,7 +139,7 @@ export default {
       sortType: 1,
       windowHeight: null,
       windowWidth: null,
-      sort: "",
+      sort: 0,
       // recommendPanel: [],
       currentPage: 1,
       pageSize: 20,
@@ -160,18 +160,16 @@ export default {
     },
     _getSearch() {
       let params = {
-        params: {
-          key: this.key,
-          size: this.pageSize,
-          page: this.currentPage,
-          sort: this.sort,
-          minprice: this.min,
-          maxprice: this.max,
-          type: this.$route.query.type,
-        },
+        key: this.key,
+        size: this.pageSize,
+        page: this.currentPage,
+        sort: this.sort,
+        minPrice: this.min,
+        maxPrice: this.max,
+        type: this.$route.query.type,
       };
       bookQueryList(params).then((res) => {
-        if (res.code === 200) {
+        if (res.rtnCode === "200") {
           this.books = res.result.data;
           this.total = res.result.total;
           this.noResult = false;

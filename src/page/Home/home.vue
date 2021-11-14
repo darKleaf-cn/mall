@@ -180,7 +180,7 @@ export default {
   },
   mounted() {
     productHome().then((res) => {
-      if (res.code !== 200) {
+      if (res.rtnCode !== "200") {
         this.error = true;
         return;
       }

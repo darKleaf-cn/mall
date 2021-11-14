@@ -310,7 +310,7 @@ export default {
     },
     _addReceiver(params) {
       addReceiver(params).then((res) => {
-        if (res.code === 200) {
+        if (res.rtnCode === "200") {
           this._receiverList();
         } else {
           this.message(res.message);
@@ -347,11 +347,14 @@ export default {
       let params = {
         userId: this.userId,
         receiverId: this.receiverId,
+        receiverName: this.receiverName,
+        receiverPhone: this.receiverPhone,
+        receiverAddress: this.receiverAddress,
         bookList: this.checkList,
       };
       submitOrder(params).then((res) => {
-        if (res.code === 200) {
-          this.payment(res.result.orderId);
+        if (res.rtnCode === "200") {
+          this.payment(res.result.orderIdList);
         } else {
           this.message(res.message);
           this.submitOrder = "提交订单";
@@ -360,12 +363,16 @@ export default {
       });
     },
     // 付款
-    payment(orderId) {
+    payment(orderIdList) {
+      let str = "";
+      for(let item of orderIdList){
+        str+= item +','
+      }
       // 需要拿到地址id
       this.$router.push({
         path: "/order/payment",
         query: {
-          orderId: orderId,
+          orderId: str,
         },
       });
     },

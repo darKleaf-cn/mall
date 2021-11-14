@@ -257,7 +257,7 @@ export default {
     //     bookNum,
     //     checked
     //   }).then(res => {
-    //     if (res.code === 200) {
+    //     if (res.rtnCode === "200") {
     //       this.EDIT_CART({
     //         bookId,
     //         checked,
@@ -302,7 +302,7 @@ export default {
         bookId,
         cartId,
       }).then((res) => {
-        if (res.code === 200) {
+        if (res.rtnCode === "200") {
           this.DEL_CART({
             bookId,
             cartId,

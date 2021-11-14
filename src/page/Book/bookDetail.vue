@@ -103,9 +103,7 @@ export default {
     ...mapMutations(["ADD_CART", "ADD_ANIMATION", "SHOW_CART"]),
     _productDet(bookId) {
       productDet({
-        params: {
-          bookId,
-        },
+        bookId,
       }).then((res) => {
         let result = res.result;
         this.book = result;

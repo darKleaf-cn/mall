@@ -6,7 +6,7 @@
           <el-input
             placeholder="请输入用户名"
             type="text"
-            v-model="userName"
+            v-model="username"
             style="width: 120px"
           ></el-input>
           <y-button
@@ -156,7 +156,7 @@ export default {
       },
       userId: "",
       token: "",
-      userName: "",
+      username: "",
     };
   },
   computed: {
@@ -203,8 +203,9 @@ export default {
             userId: this.userId,
             token: this.token,
             userImage: data,
+            username:''
           }).then((res) => {
-            if (res.code === 200) {
+            if (res.rtnCode === "200") {
               this.RECORD_USERINFO({
                 info: res.result,
               });
@@ -224,20 +225,21 @@ export default {
       this.editAvatarShow = true;
     },
     editUserName() {
-      if (!this.userName) {
+      if (!this.username) {
         return;
       }
       updateUserInfo({
         userId: this.userId,
         token: this.token,
-        username: this.userName,
+        username: this.username,
+        userImage:''
       }).then((res) => {
-        if (res.code === 200) {
-          this.RECORD_USERINFO({
-            info: res.result,
-          });
+        if (res.rtnCode === "200") {
+          // this.RECORD_USERINFO({
+          //   info: res.result,
+          // });
           this.editAvatarShow = false;
-          this.$router.go(0);
+          // this.$router.go(0);
           this.messageSuccess("修改成功");
         } else {
           this.messageFail(res.message);

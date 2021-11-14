@@ -377,9 +377,11 @@ export default {
     _getCartList() {
       getCartList({
         userId: getStore("userId"),
+        page:1,
+        size:20
       })
         .then((res) => {
-          if (res.code === 200) {
+          if (res.rtnCode === "200") {
             const data = res.result.data;
             for (let item of data) {
               item.checked = "1";
