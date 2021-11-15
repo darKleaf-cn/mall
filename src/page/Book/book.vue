@@ -130,7 +130,6 @@ export default {
       this.loading = true;
     },
     _bookQueryList() {
-      let cid = this.$route.query.cid;
       if (this.min !== "") {
         this.min = Math.floor(this.min);
       }
@@ -143,7 +142,7 @@ export default {
           sort: this.sort,
           minPrice: this.min,
           maxPrice: this.max,
-          type: this.$route.query.type,
+          catgId: this.$route.query.catgId,
       };
       bookQueryList(params).then((res) => {
         if (res.rtnCode === "200") {

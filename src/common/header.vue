@@ -195,7 +195,7 @@
                     >全部</a
                   >
                 </li>
-                <li v-for="(item, i) in navList" :key="i">
+                <li v-for="(item, i) in bookType" :key="i">
                   <a
                     @click="changGoods(-3, item)"
                     :class="{ active: i === choosePage }"
@@ -214,7 +214,7 @@
 <script>
 import YButton from "/components/YButton";
 import { mapMutations, mapState } from "vuex";
-import { getCartList, delCart } from "@/api/goods";
+import { getCartList, delCart,bookType } from "@/api/goods";
 import { logout } from "@/api/index";
 import { setStore, getStore, removeStore } from "/utils/storage";
 import data from "../assets/json/index.json";
@@ -234,7 +234,7 @@ export default {
       searchResults: [],
       timeout: null,
       token: "",
-      navList: data.navList,
+      bookType: [],
     };
   },
   computed: {
@@ -311,7 +311,7 @@ export default {
         this.$router.push({
           path: "/refreshgoods",
           query: {
-            type: item.name,
+            catgId: item.catgId,
           },
         });
       }
@@ -466,14 +466,14 @@ export default {
         "//" + window.location.host + "/#/bookDetail?bookId=" + bookId
       );
     },
-    // _getNavList () {
-    //   navList().then(res => {
-    //     this.navList = res.result
-    //   })
-    // }
+    _bookType(){
+      bookType().then((res)=>{
+        this.bookType = res.result.data;
+      })
+    }
   },
   mounted() {
-    // this._getNavList()
+    this._bookType();
     this.token = getStore("token");
     if (this.login) {
       this._getCartList();

@@ -7,6 +7,10 @@ export const bookQueryList = (params) => {
 export const productDet = (params) => {
   return http.fetchPost('/book/detail', params)
 }
+// 商品类型
+export const bookType = (params) => {
+  return http.fetchPost('/book/bookType', params)
+}
 
 // 获取购物车列表
 export const getCartList = (params) => {

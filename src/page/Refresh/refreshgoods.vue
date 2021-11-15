@@ -7,7 +7,7 @@ export default {
     this.$router.push({
       path: "/book",
       query: {
-        type: this.$route.query.type,
+        catgId: this.$route.query.catgId,
       },
     });
     return {};
