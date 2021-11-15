@@ -21,9 +21,8 @@
             <div class="receiverPhoneephone">{{ item.receiverPhone }}</div>
             <div class="defalut">
               <a
-                @click="changeDef(item)"
                 href="javascript:;"
-                v-text="item.isDefault ? '( 默认地址 )' : '设为默认'"
+                v-text="item.isDefault ? '( 默认地址 )' : ''"
                 :class="{ 'defalut-address': item.isDefault }"
               ></a>
             </div>

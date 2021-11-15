@@ -168,7 +168,7 @@ export default {
     },
     orderPayment(orderId) {
       window.open(
-        window.location.origin + "#/order/payment?orderId=" + orderId
+        window.location.origin + "#/order/payment?orderId=" + orderId+","
       );
     },
     bookDetail(id) {
