@@ -316,54 +316,6 @@ export default {
         });
       }
     },
-    // 搜索框提示
-    loadAll() {
-      let params = {
-        params: {
-          key: this.input,
-        },
-      };
-      // getQuickSearch(params).then(res => {
-      //   if (res === null || res === '') {
-      //     return
-      //   }
-      //   if (res.error) {
-      //     this.showError(res.error.reason)
-      //     return
-      //   }
-      //   var array = []
-      //   var maxSize = 5
-      //   if (res.hits.hits.length <= 5) {
-      //     maxSize = res.hits.hits.length
-      //   }
-      //   for (var i = 0; i < maxSize; i++) {
-      //     var obj = {}
-      //     obj.value = res.hits.hits[i]._source.productName
-      //     array.push(obj)
-      //   }
-      //   if (array.length !== 0) {
-      //     this.searchResults = array
-      //   } else {
-      //     this.searchResults = []
-      //   }
-      // })
-    },
-    querySearchAsync(queryString, cb) {
-      if (this.input === undefined) {
-        cb([]);
-        return;
-      }
-      this.input = this.input.trim();
-      if (this.input === "") {
-        cb([]);
-        return;
-      } else {
-        this.loadAll();
-        setTimeout(() => {
-          cb(this.searchResults);
-        }, 300);
-      }
-    },
     handleSelect(item) {
       this.input = item.value;
     },
@@ -440,9 +392,7 @@ export default {
     // 退出登陆
     _logout() {
       let params = {
-        params: {
-          token: this.token,
-        },
+        token: this.token
       };
       logout(params).then((res) => {
         removeStore("buyCart");
