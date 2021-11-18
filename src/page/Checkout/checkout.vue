@@ -420,9 +420,7 @@ export default {
     },
     _productDet(bookId) {
       productDet({
-        params: {
-          bookId,
-        },
+        bookId,
       }).then((res) => {
         let item = res.result;
         item.checked = "1";
